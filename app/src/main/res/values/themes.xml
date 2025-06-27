@@ -6,4 +6,13 @@
     </style>
 
     <style name="Theme.ServiTrack_movil" parent="Base.Theme.ServiTrack_movil" />
+
+    <style name="Theme.ServiTrack_movil.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.ServiTrack_movil.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.ServiTrack_movil.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
