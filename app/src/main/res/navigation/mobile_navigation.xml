@@ -8,18 +8,33 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.example.servitrack_movil.ui.home.HomeFragment"
-        android:label="@string/menu_home"
+        android:label="Inicio"
         tools:layout="@layout/fragment_home" />
-
-    <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.servitrack_movil.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
 
     <fragment
         android:id="@+id/nav_slideshow"
         android:name="com.example.servitrack_movil.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
+        android:label="Generar reportes"
         tools:layout="@layout/fragment_slideshow" />
+
+
+    <fragment
+        android:id="@+id/nav_listaReportes"
+        android:name="com.example.servitrack_movil.ListaReporteFragment"
+        android:label="Lista de reportes"
+        tools:layout="@layout/fragment_lista_reporte" />
+
+
+    <fragment
+        android:id="@+id/nav_empresas"
+        android:name="com.example.servitrack_movil.ListaEmpresaFragment"
+        android:label="Empresas"
+        tools:layout="@layout/fragment_lista_empresa" />
+
+
+    <fragment
+        android:id="@+id/nav_listaTickets"
+        android:name="com.example.servitrack_movil.ListaTicketFragment"
+        android:label="Lista de tickets"
+        tools:layout="@layout/fragment_lista_ticket" />
 </navigation>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <!-- Título principal -->
+
+    <TextView
+        android:id="@+id/txtTituloReportes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="32dp"
+        android:text="Listado de Reportes"
+        android:textColor="#003F4E"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="76dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="18dp"
+        android:src="@mipmap/logo"
+        app:layout_constraintBottom_toTopOf="@+id/btnCrear"
+        app:layout_constraintEnd_toStartOf="@+id/txtTituloReportes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtListaReportes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        android:text="Lista de reportes"
+        android:textColor="#003F4E"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutBotonesFiltro" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnCrear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/rounded_button"
+        android:backgroundTint="#003F4E"
+        android:text="+ Reporte Nuevo"
+        android:textColor="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtTituloReportes" />
+
+    <!-- Botones de filtro -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutBotonesFiltro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/btnCrear"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnOpen"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Abiertos"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/rounded_button_orange"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnInProgress"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.29"
+            android:layout_marginEnd="4dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnInProgress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="En proceso"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/rounded_button"
+            app:layout_constraintStart_toEndOf="@id/btnOpen"
+            app:layout_constraintEnd_toStartOf="@id/btnResolved"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.29"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnResolved"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Resueltos"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/rounded_button"
+            android:backgroundTint="#3CB371"
+            app:layout_constraintStart_toEndOf="@id/btnInProgress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.29"
+            android:layout_marginStart="4dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+
+    <!-- RecyclerView para los reportes -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:backgroundTint="#FFFFFF"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtListaReportes">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- Icono de estado -->
+            <ImageView
+                android:id="@+id/imgEstado"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_user"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Título del reporte -->
+            <TextView
+                android:id="@+id/txtTituloReporte"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="Título del reporte"
+                android:textColor="#003F4E"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imgEstado"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Estado -->
+            <TextView
+                android:id="@+id/txtEstado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="En proceso"
+                android:textColor="#666"
+                app:layout_constraintStart_toStartOf="@id/txtTituloReporte"
+                app:layout_constraintTop_toBottomOf="@id/txtTituloReporte" />
+
+            <!-- Fecha -->
+            <TextView
+                android:id="@+id/txtFecha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12 abr 2025"
+                android:textColor="#999"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
