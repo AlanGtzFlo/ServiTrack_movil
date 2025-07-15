@@ -22,10 +22,6 @@
             android:icon="@drawable/parking"
             android:title="Ubicaciones" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/listcreate"
-            android:title="Generar reportes" />
-        <item
             android:id="@+id/nav_listaReportes"
             android:icon="@drawable/listacheck"
             android:title="Lista de reportes" />

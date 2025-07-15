@@ -41,11 +41,10 @@ class MenuActivity : AppCompatActivity() {
             setOf(
                 R.id.nav_home,
                 R.id.nav_usuario,
-                R.id.nav_listaTickets,          // Lista de tickets
+                R.id.nav_listaTickets,
                 R.id.nav_ubicaciones,
-                R.id.nav_slideshow,        // Generar reportes
-                R.id.nav_listaReportes,    // Lista de reportes
-                R.id.nav_empresas,         // Empresas
+                R.id.nav_listaReportes,
+                R.id.nav_empresas,
                 R.id.nav_cerrar_sesion
             ), drawerLayout
         )

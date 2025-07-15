@@ -12,29 +12,107 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.servitrack_movil.ui.slideshow.SlideshowFragment"
+        android:id="@+id/nav_generarReporte"
+        android:name="com.example.servitrack_movil.GenerarReporteFragment"
         android:label="Generar reportes"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_generar_reporte" />
 
 
     <fragment
         android:id="@+id/nav_listaReportes"
         android:name="com.example.servitrack_movil.ListaReporteFragment"
         android:label="Lista de reportes"
-        tools:layout="@layout/fragment_lista_reporte" />
+        tools:layout="@layout/fragment_lista_reporte">
+
+        <action
+            android:id="@+id/action_listaReporteFragment_to_generarReporteFragment"
+            app:destination="@id/nav_generarReporte" />
+
+        <action
+            android:id="@+id/action_reporteFragment_to_detalleReporteFragment"
+            app:destination="@id/detalleReportesFragment" />
+    </fragment>
 
 
     <fragment
         android:id="@+id/nav_empresas"
         android:name="com.example.servitrack_movil.ListaEmpresaFragment"
         android:label="Empresas"
-        tools:layout="@layout/fragment_lista_empresa" />
+        tools:layout="@layout/fragment_lista_empresa">
+
+        <action
+            android:id="@+id/action_listaEmpresasFragment_to_detalleEmpresasFragment"
+            app:destination="@id/detalleEmpresasFragment" />
+    </fragment>
 
 
     <fragment
         android:id="@+id/nav_listaTickets"
         android:name="com.example.servitrack_movil.ListaTicketFragment"
-        android:label="Lista de tickets"
-        tools:layout="@layout/fragment_lista_ticket" />
+        android:label="Lista de Tickets"
+        tools:layout="@layout/fragment_lista_ticket">
+
+        <action
+            android:id="@+id/action_listaTicketFragment_to_detalleTicketFragment"
+            app:destination="@id/detalleTicketFragment" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/nav_usuario"
+        android:name="com.example.servitrack_movil.UsuarioFragment"
+        android:label="Usuario"
+        tools:layout="@layout/fragment_usuario">
+
+        <action
+            android:id="@+id/action_usuarioFragment_to_changePasswordFragment"
+            app:destination="@id/CCFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/CCFragment"
+        android:name="com.example.servitrack_movil.CCFragment"
+        android:label="Cambiar contraseña"
+        tools:layout="@layout/fragment_c_c"/>
+
+    <fragment
+        android:id="@+id/detalleTicketFragment"
+        android:name="com.example.servitrack_movil.DetalleTicketFragment"
+        android:label="Detalle del Ticket"
+        tools:layout="@layout/fragment_detalle_ticket">
+
+        <!-- Argumento para recibir el ID del ticket -->
+        <argument
+            android:name="ticketId"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detalleEmpresasFragment"
+        android:name="com.example.servitrack_movil.DetalleEmpresaFragment"
+        android:label="Detalle de la empresa"
+        tools:layout="@layout/fragment_detalle_empresa">
+
+        <argument
+            android:name="empresa"
+            app:argType="com.example.servitrack_movil.Empresa"
+            app:nullable="false" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/detalleReportesFragment"
+        android:name="com.example.servitrack_movil.DetalleReporteFragment"
+        android:label="Detalle del Reporte"
+        tools:layout="@layout/fragment_detalle_reporte">
+
+        <!-- Argumento para recibir el ID del ticket -->
+        <argument
+            android:name="reporte"
+            app:argType="com.example.servitrack_movil.Reporte" />
+
+    </fragment>
+
+
 </navigation>

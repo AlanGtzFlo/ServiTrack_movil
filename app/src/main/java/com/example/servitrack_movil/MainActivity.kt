@@ -7,6 +7,9 @@ import android.content.Intent
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.example.servitrack_movil.Network.ApiClient
+import com.example.servitrack_movil.Network.LoginRequest
+import com.example.servitrack_movil.Network.LoginResponse
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,24 +18,65 @@ class MainActivity : AppCompatActivity() {
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        // Referencias a los campos
         val edtUsuario = findViewById<EditText>(R.id.edtIdUsuario)
         val edtPass = findViewById<EditText>(R.id.edtPass)
         val btnIngresar = findViewById<Button>(R.id.btnIngresar)
         val btnCancelar = findViewById<Button>(R.id.btnCancelar)
 
         btnIngresar.setOnClickListener {
-            val usuario = edtUsuario.text.toString()
-            val password = edtPass.text.toString()
+            val usuario = edtUsuario.text.toString().trim()
+            val password = edtPass.text.toString().trim()
 
-            // Validación simple de prueba
-            if (usuario == "2122200418" && password == "1234") {
-                val intent = Intent(this, MenuActivity::class.java)
-                startActivity(intent)
-                finish() // Cierra esta pantalla
-            } else {
-                Toast.makeText(this, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
+            if (usuario.isBlank() || password.isBlank()) {
+                Toast.makeText(this, "Por favor completa todos los campos", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
+
+            val loginRequest = LoginRequest(email = usuario, password = password)
+
+            val call = ApiClient.retrofit.login(loginRequest)
+            call.enqueue(object : retrofit2.Callback<LoginResponse> {
+                override fun onResponse(
+                    call: retrofit2.Call<LoginResponse>,
+                    response: retrofit2.Response<LoginResponse>
+                ) {
+                    if (response.isSuccessful) { // Check only for HTTP success first
+                        val loginData = response.body() // loginData is LoginResponse?
+
+                        if (loginData != null) { // Explicitly check if the body is not null
+                            val accessToken = loginData.access   // Now, loginData is smart-cast to non-nullable
+                            val refreshToken = loginData.refresh // Same here
+
+                            // Guarda los tokens, por ejemplo, en SharedPreferences
+                            // val sharedPrefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
+                            // sharedPrefs.edit().putString("access_token", accessToken).apply()
+                            // sharedPrefs.edit().putString("refresh_token", refreshToken).apply()
+
+                            Toast.makeText(this@MainActivity, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
+
+                            val intent = Intent(this@MainActivity, MenuActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            // This case means HTTP 200 OK, but the response body was null or couldn't be parsed
+                            // (e.g., empty response, or parsing failed despite valid JSON)
+                            android.util.Log.e("Login", "Respuesta exitosa, pero el cuerpo es nulo.")
+                            Toast.makeText(this@MainActivity, "Error en la respuesta del servidor (body nulo)", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        // This block executes if the server returns a non-200 HTTP code (e.g., 401, 403, 500)
+                        val errorBody = response.errorBody()?.string()
+                        val errorCode = response.code()
+                        android.util.Log.e("Login", "Error code: $errorCode, Error body: $errorBody")
+                        Toast.makeText(this@MainActivity, "Credenciales incorrectas o error en el servidor", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: retrofit2.Call<LoginResponse>, t: Throwable) {
+                    Toast.makeText(this@MainActivity, "Error de conexión: ${t.message}", Toast.LENGTH_LONG).show()
+                    android.util.Log.e("Login", "Fallo de red: ${t.message}", t)
+                }
+            })
         }
 
         btnCancelar.setOnClickListener {
