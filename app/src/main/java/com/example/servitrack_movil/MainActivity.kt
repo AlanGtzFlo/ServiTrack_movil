@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val loginRequest = LoginRequest(email = usuario, password = password)
+            val loginRequest = LoginRequest(correo = usuario, password = password)
 
             val call = ApiClient.retrofit.login(loginRequest)
             call.enqueue(object : retrofit2.Callback<LoginResponse> {
