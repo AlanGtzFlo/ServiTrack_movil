@@ -1,16 +1,15 @@
 package com.example.servitrack_movil
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
 import com.example.servitrack_movil.databinding.ActivityMenuBinding
-
+import com.google.android.material.navigation.NavigationView
 
 class MenuActivity : AppCompatActivity() {
 
@@ -20,18 +19,24 @@ class MenuActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Primero inflamos el layout
+        // ✅ PRIMERO: Inicializar el binding
         binding = ActivityMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Toolbar y navegación
-        setSupportActionBar(binding.appBarMenu.toolbar)
+        val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val nombre = prefs.getString("nombre", "Usuario")
+        val id = prefs.getInt("id", 0)
 
-        binding.appBarMenu.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .setAnchorView(R.id.fab).show()
-        }
+        // ✅ Acceder al header del NavigationView
+        val headerView = binding.navView.getHeaderView(0)
+        val txtNombre = headerView.findViewById<TextView>(R.id.txtNombre)
+        val txtMatricula = headerView.findViewById<TextView>(R.id.txtMatricula)
+
+        txtNombre.text = nombre
+        txtMatricula.text = "ID: $id"
+
+        // ✅ Toolbar y navegación
+        setSupportActionBar(binding.appBarMenu.toolbar)
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -56,5 +61,4 @@ class MenuActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_menu)
         return androidx.navigation.ui.NavigationUI.navigateUp(navController, appBarConfiguration)
     }
-
 }

@@ -11,6 +11,8 @@ import com.example.servitrack_movil.Consejos
 import com.example.servitrack_movil.R
 import com.example.servitrack_movil.databinding.FragmentHomeBinding
 
+
+
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -39,10 +41,13 @@ class HomeFragment : Fragment() {
         binding.recyclerConsejos.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerConsejos.adapter = ConsejoAdapter(listaConsejos)
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        // Cargar SharedPreferences
+        val prefs = requireContext().getSharedPreferences("user_prefs", android.content.Context.MODE_PRIVATE)
+        val nombre = prefs.getString("nombre", "Usuario")
+        val id = prefs.getInt("id", 0)
+
+        binding.txtNombre.text = nombre
+        binding.txtMatricula.text = "Matrícula: $id"
     }
 }
