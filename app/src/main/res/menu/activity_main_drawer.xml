@@ -18,7 +18,7 @@
             android:icon="@drawable/lista"
             android:title="Lista de tickets" />
         <item
-            android:id="@+id/nav_ubicaciones"
+            android:id="@+id/nav_listaUbicaciones"
             android:icon="@drawable/parking"
             android:title="Ubicaciones" />
         <item

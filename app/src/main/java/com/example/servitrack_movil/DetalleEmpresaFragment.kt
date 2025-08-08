@@ -31,11 +31,12 @@ class DetalleEmpresaFragment : Fragment() {
 
         val empresa = args.empresa
 
-        // Mostrar datos en UI
-        binding.txtTituloDetalle.text = empresa.titulo
-        binding.txtEstadoDetalle.text = empresa.estado
-        binding.txtRFCDetalle.text = empresa.RFC
-        // etc... otros campos
+        binding.txtEmpresaId.text = "ID de la empresa:\n${empresa.id}"
+        binding.txtTituloDetalle.text = "Nombre:\n${empresa.nombre}"
+        binding.txtEstadoDetalle.text = "Estatus:\n${empresa.estatus}"
+        binding.txtTipoPoliza.text = "Tipo de póliza:\n${empresa.tipo_poliza}"
+        binding.txtFechaInicioPoliza.text = "Inicio de póliza:\n${empresa.fecha_inicio_poliza}"
+        binding.txtFechaFinPoliza.text = "Fin de póliza:\n${empresa.fecha_fin_poliza}"
     }
 
     override fun onDestroyView() {

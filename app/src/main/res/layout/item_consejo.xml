@@ -2,7 +2,7 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="250dp"
-    android:layout_height="wrap_content"
+    android:layout_height="300dp"
     android:layout_margin="8dp"
     android:background="#003F4E"
     app:cardCornerRadius="16dp"
@@ -11,15 +11,14 @@
     <LinearLayout
         android:orientation="vertical"
         android:padding="12dp"
-        android:background="#003F4E"
+        android:background="@drawable/bg_card"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="300dp">
 
         <ImageView
             android:id="@+id/imgConsejo"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:background="#003F4E"
+            android:layout_height="200dp"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_foreground" />
 
@@ -27,7 +26,7 @@
             android:id="@+id/txtMensaje"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/rounded_textview"
             android:text="Consejo aquí"
             android:textAlignment="center"

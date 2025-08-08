@@ -14,11 +14,9 @@ class EmpresaAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(empresa: Empresa) {
-            binding.txtNombreEmpresa.text = empresa.titulo
-            binding.txtEstadoEmpresa.text = empresa.estado
-            binding.txtRFC.text = empresa.RFC
-
-            // Aquí puedes cambiar color o ícono según estado si quieres
+            binding.txtNombreEmpresa.text = empresa.nombre
+            binding.txtEstadoEmpresa.text = "Estado: ${empresa.estatus}"
+            binding.txtRFC.text = "ID: ${empresa.id}"
 
             binding.root.setOnClickListener {
                 onItemClick(empresa)

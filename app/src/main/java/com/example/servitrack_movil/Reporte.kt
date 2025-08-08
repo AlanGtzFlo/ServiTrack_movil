@@ -5,8 +5,14 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Reporte(
-    val id: String,
-    val titulo: String,
+    val id: Int,
+    val titulo: String,         // Puedes usar descripción corta o categoría
+    val descripcion: String,
+    val prioridad: String,
     val estado: String,
-    val fecha: String
+    val fecha: String,
+    val ubicacion: String,
+    val creador: String,
+    val tecnico: String
 ) : Parcelable
+

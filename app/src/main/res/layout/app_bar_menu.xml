@@ -8,14 +8,15 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/Theme.ServiTrack_movil.AppBarOverlay">
+        android:layout_height="wrap_content">
+
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#F4A300"
+            android:background="#FFFFFF"
+
             app:popupTheme="@style/Theme.ServiTrack_movil.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>

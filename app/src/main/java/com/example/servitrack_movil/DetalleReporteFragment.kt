@@ -29,9 +29,15 @@ class DetalleReporteFragment : Fragment() {
         val reporte = args.reporte
 
         // Mostrar datos en UI
-        binding.txtTituloDetalle.text = reporte.titulo
-        binding.txtEstadoDetalle.text = reporte.estado
-        binding.txtFechaDetalle.text = reporte.fecha
+        binding.txtTitulo.text = reporte.titulo
+        binding.txtEstado.text = reporte.estado
+        binding.txtFecha.text = reporte.fecha
+        binding.txtDescripcion.text = reporte.descripcion
+        binding.txtPrioridad.text = reporte.prioridad
+        binding.txtUbicacion.text = reporte.ubicacion
+        binding.txtCreador.text = reporte.creador
+        binding.txtTecnico.text = reporte.tecnico
+        binding.txtTicketId.text = reporte.id.toString()
         // etc... otros campos
     }
 

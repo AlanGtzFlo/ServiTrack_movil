@@ -6,7 +6,9 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class Empresa(
     val id: String,
-    val titulo: String,
-    val estado: String,
-    val RFC: String
+    val nombre: String,
+    val estatus: String,
+    val tipo_poliza: String,
+    val fecha_inicio_poliza: String,
+    val fecha_fin_poliza: String
 ) : Parcelable

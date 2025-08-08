@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
         val edtUsuario = findViewById<EditText>(R.id.edtIdUsuario)
         val edtPass = findViewById<EditText>(R.id.edtPass)
         val btnIngresar = findViewById<Button>(R.id.btnIngresar)
-        val btnCancelar = findViewById<Button>(R.id.btnCancelar)
         val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
         val token = prefs.getString("access_token", null)
 
@@ -76,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                                 putString("correo", loginData.user.correo)
                                 putString("rol", loginData.user.rol)
                                 putString("fecha", loginData.user.fecha_registro)
-                                putString("imagen", loginData.user.img)
+                                putString("imagen", loginData.user.foto)
                                 putString("access_token", accessToken)
                                 putString("refresh_token", refreshToken)
                                 apply()
@@ -108,11 +107,6 @@ class MainActivity : AppCompatActivity() {
                     android.util.Log.e("Login", "Fallo de red: ${t.message}", t)
                 }
             })
-        }
-
-        btnCancelar.setOnClickListener {
-            edtUsuario.text.clear()
-            edtPass.text.clear()
         }
     }
 }

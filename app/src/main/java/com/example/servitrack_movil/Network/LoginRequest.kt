@@ -11,6 +11,14 @@ data class LoginResponse(
     val user: User
 )
 
+data class LogoutRequest(
+    val refresh: String
+)
+
+data class LogoutResponse(
+    val message: String
+)
+
 data class User(
     val id: Int,
     val nombre: String,
@@ -18,11 +26,17 @@ data class User(
     val rol: String,
     val activo: Boolean,
     val fecha_registro: String,
-    val img: String? = null
+    val foto: String,
+    val telefono: String,
+    val direccion: String
 )
 
 data class UserInfo(
     val id: Int,
     val name: String,
     val email: String
+)
+
+data class NuevaPasswordRequest(
+    val password: String
 )

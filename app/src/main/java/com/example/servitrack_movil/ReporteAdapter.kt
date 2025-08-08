@@ -17,8 +17,6 @@ class ReporteAdapter(
             binding.txtEstado.text = reporte.estado
             binding.txtFecha.text = reporte.fecha
 
-            // Cambia icono o color según estado si quieres aquí
-
             binding.root.setOnClickListener {
                 onItemClick(reporte)
             }

@@ -1,0 +1,79 @@
+package com.example.servitrack_movil.ui.home
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.servitrack_movil.Network.ApiClient
+import com.example.servitrack_movil.R
+import com.example.servitrack_movil.Network.UbicacionResponse
+import com.example.servitrack_movil.Ubicacion
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.navigation.fragment.findNavController
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+class ListaUbicacion : Fragment() {
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: UbicacionAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_lista_ubicacion, container, false)
+        recyclerView = view.findViewById(R.id.recyclerTickets)
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+
+        cargarUbicaciones()
+
+        return view
+    }
+
+    fun UbicacionResponse.toUbicacion(): Ubicacion {
+        return Ubicacion(
+            id = this.id,
+            nombre = this.nombre ?: "Sin nombre",
+            direccion = this.direccion ?: "Sin dirección",
+            cliente_id = this.cliente?.id ?: 0,
+            empresa_id = this.empresa?.id ?: 0,
+            contacto = this.contacto ?: "No especificado",
+            estatus = this.estatus ?: false,
+            fecha_creacion = this.fecha_creacion ?: "Fecha no disponible"
+        )
+    }
+
+
+
+
+    private fun cargarUbicaciones() {
+        ApiClient.retrofit.getUbicaciones().enqueue(object : Callback<List<UbicacionResponse>> {
+            override fun onResponse(
+                call: Call<List<UbicacionResponse>>,
+                response: Response<List<UbicacionResponse>>
+            ) {
+                if (response.isSuccessful) {
+                    val ubicaciones = response.body()?.map { it.toUbicacion() } ?: emptyList()
+                    val adapter = UbicacionAdapter(ubicaciones) { ubicacion ->
+                        val action = ListaUbicacionDirections
+                            .actionListaUbicacionesFragmentToDetalleUbicacionFragment(ubicacion)
+                        findNavController().navigate(action)
+                    }
+                    recyclerView.adapter = adapter
+                } else {
+                    Toast.makeText(requireContext(), "Error al obtener ubicaciones", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<UbicacionResponse>>, t: Throwable) {
+                Toast.makeText(requireContext(), "Fallo de red: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+}

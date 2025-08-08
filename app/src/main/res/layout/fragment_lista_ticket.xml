@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="#FFFFFF"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp">
@@ -13,7 +14,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="16dp"
         android:text="Listado de tickets"
         android:textColor="#003F4E"
         android:textSize="24sp"
@@ -27,12 +27,13 @@
         android:layout_width="0dp"
         android:layout_height="250dp"
         android:layout_marginTop="48dp"
-        app:layout_constraintTop_toBottomOf="@id/txtTituloTickets"
+        app:layout_constraintTop_toBottomOf="@id/layoutBotonesFiltro"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
 
 
+    <!-- Botones de filtro -->
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="76dp"
@@ -41,18 +42,18 @@
         android:layout_marginEnd="16dp"
         android:src="@mipmap/logo"
         app:layout_constraintEnd_toStartOf="@+id/txtTituloTickets"
+        app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Botones de filtro -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutBotonesFiltro"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="64dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/barChart">
+        app:layout_constraintTop_toBottomOf="@id/txtTituloTickets">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnOpen"
@@ -63,9 +64,9 @@
             android:text="Abiertos"
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toStartOf="@id/btnInProgress"
-            app:layout_constraintWidth_percent="0.29"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.29" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnInProgress"
@@ -77,10 +78,10 @@
             android:text="En proceso"
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toStartOf="@id/btnResolved"
-            app:layout_constraintWidth_percent="0.29"
-
             app:layout_constraintStart_toEndOf="@id/btnOpen"
-            app:layout_constraintTop_toTopOf="parent" />
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.29" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnResolved"
@@ -92,10 +93,10 @@
             android:text="Resueltos"
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintWidth_percent="0.29"
-
             app:layout_constraintStart_toEndOf="@id/btnInProgress"
-            app:layout_constraintTop_toTopOf="parent" />
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.29" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -103,7 +104,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/layoutBotonesFiltro"
+        app:layout_constraintTop_toBottomOf="@id/barChart"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

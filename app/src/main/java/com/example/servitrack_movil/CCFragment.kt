@@ -1,5 +1,6 @@
 package com.example.servitrack_movil
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.servitrack_movil.Network.ApiClient
+import com.example.servitrack_movil.Network.NuevaPasswordRequest
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CCFragment : Fragment() {
 
@@ -21,7 +27,6 @@ class CCFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_c_c, container, false)
 
-        // Asocia las vistas con el layout
         edtNueva = view.findViewById(R.id.edtPasswordNueva)
         edtConfirmar = view.findViewById(R.id.edtPasswordConfirmar)
         btnGuardar = view.findViewById(R.id.btnGuardarCambio)
@@ -31,15 +36,44 @@ class CCFragment : Fragment() {
             val confirmar = edtConfirmar.text.toString()
 
             if (nueva != confirmar) {
-                Toast.makeText(requireContext(), "Las nuevas contraseñas no coinciden", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Las contraseñas no coinciden", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Aquí iría la lógica real de actualización
-            Toast.makeText(requireContext(), "Contraseña actualizada correctamente", Toast.LENGTH_LONG).show()
+            if (nueva.length < 8) {
+                Toast.makeText(requireContext(), "La contraseña debe tener al menos 8 caracteres", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
 
-            // Opcional: cerrar fragmento o navegar atrás
-            parentFragmentManager.popBackStack()
+            // 🔐 Recuperamos token e ID desde SharedPreferences
+            val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+            val token = prefs.getString("access_token", null)
+            val id = prefs.getInt("id", -1)
+
+            if (token.isNullOrEmpty() || id == -1) {
+                Toast.makeText(requireContext(), "No se encontró sesión activa", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // 📨 Construimos y enviamos la petición
+            val request = NuevaPasswordRequest(password = nueva)
+
+            ApiClient.retrofit
+                .cambiarPassword(id, "Bearer $token", request)
+                .enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                        if (response.isSuccessful) {
+                            Toast.makeText(requireContext(), "Contraseña actualizada correctamente", Toast.LENGTH_LONG).show()
+                            parentFragmentManager.popBackStack()
+                        } else {
+                            Toast.makeText(requireContext(), "Error al cambiar contraseña (${response.code()})", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Void>, t: Throwable) {
+                        Toast.makeText(requireContext(), "Error de red: ${t.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    }
+                })
         }
 
         return view

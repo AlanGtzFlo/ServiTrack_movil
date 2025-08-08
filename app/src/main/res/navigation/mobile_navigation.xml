@@ -17,6 +17,30 @@
         android:label="Generar reportes"
         tools:layout="@layout/fragment_generar_reporte" />
 
+    <fragment
+        android:id="@+id/nav_listaUbicaciones"
+        android:name="com.example.servitrack_movil.ui.home.ListaUbicacion"
+        android:label="Lista de ubicaciones"
+        tools:layout="@layout/fragment_lista_ubicacion">
+
+        <action
+            android:id="@+id/action_listaUbicacionesFragment_to_detalleUbicacionFragment"
+            app:destination="@id/detalleUbicacionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detalleUbicacionFragment"
+        android:name="com.example.servitrack_movil.DetalleUbicacionFragment"
+        android:label="Detalle de la ubicación"
+        tools:layout="@layout/fragment_detalle_ubicacion">
+
+        <argument
+            android:name="ubicacion"
+            app:argType="com.example.servitrack_movil.Ubicacion"
+            app:nullable="false" />
+    </fragment>
+
+
 
     <fragment
         android:id="@+id/nav_listaReportes"
@@ -29,8 +53,14 @@
             app:destination="@id/nav_generarReporte" />
 
         <action
-            android:id="@+id/action_reporteFragment_to_detalleReporteFragment"
-            app:destination="@id/detalleReportesFragment" />
+            android:id="@+id/action_navListaReportes_to_detalleReportesFragment"
+            app:destination="@id/detalleReportesFragment">
+
+            <argument
+                android:name="reporte"
+                app:argType="com.example.servitrack_movil.Reporte"
+                app:nullable="false" />
+        </action>
     </fragment>
 
 
@@ -110,7 +140,9 @@
         <!-- Argumento para recibir el ID del ticket -->
         <argument
             android:name="reporte"
-            app:argType="com.example.servitrack_movil.Reporte" />
+            app:argType="com.example.servitrack_movil.Reporte"
+            app:nullable="false" />
+
 
     </fragment>
 

@@ -10,9 +10,12 @@
     <style name="Theme.ServiTrack_movil.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="colorControlNormal">#F4A300</item> <!-- Íconos de toolbar -->
+        <item name="android:textColorPrimary">#FFFFFF</item> <!-- Título del toolbar -->
     </style>
 
     <style name="Theme.ServiTrack_movil.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.ServiTrack_movil.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>
