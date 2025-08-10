@@ -14,6 +14,7 @@ import com.example.servitrack_movil.databinding.FragmentListaEmpresaBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.content.Context
 
 class ListaEmpresaFragment : Fragment() {
 
@@ -32,13 +33,14 @@ class ListaEmpresaFragment : Fragment() {
     }
 
     private fun cargarEmpresasDesdeAPI() {
-        val call = ApiClient.retrofit.getEmpresas()
+        val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val token = prefs.getString("access_token", null) ?: ""
+        val authHeader = "Bearer $token"
+
+        val call = ApiClient.retrofit.getEmpresas(authHeader)
 
         call.enqueue(object : Callback<List<EmpresaResponse>> {
-            override fun onResponse(
-                call: Call<List<EmpresaResponse>>,
-                response: Response<List<EmpresaResponse>>
-            ) {
+            override fun onResponse(call: Call<List<EmpresaResponse>>, response: Response<List<EmpresaResponse>>) {
                 if (response.isSuccessful) {
                     val empresas = response.body() ?: emptyList()
 
@@ -48,7 +50,7 @@ class ListaEmpresaFragment : Fragment() {
                             nombre = it.nombre,
                             estatus = if (it.estatus) "Activa" else "Inactiva",
                             tipo_poliza = it.tipo_poliza,
-                            fecha_inicio_poliza = it.fecha_inicio_poliza.toString().substring(0, 10), // yyyy-MM-dd
+                            fecha_inicio_poliza = it.fecha_inicio_poliza.toString().substring(0, 10),
                             fecha_fin_poliza = it.fecha_fin_poliza.toString().substring(0, 10)
                         )
                     }) { empresaSeleccionada ->

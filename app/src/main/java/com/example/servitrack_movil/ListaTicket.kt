@@ -57,7 +57,10 @@ class ListaTicketFragment : Fragment() {
     }
 
     private fun obtenerTicketsDesdeAPI() {
-        val call = ApiClient.retrofit.getTickets()
+        val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val token = prefs.getString("access_token", null) ?: ""
+        val authHeader = "Bearer $token"
+        val call = ApiClient.retrofit.getTickets(authHeader)
 
         call.enqueue(object : Callback<List<TicketResponse>> {
             override fun onResponse(

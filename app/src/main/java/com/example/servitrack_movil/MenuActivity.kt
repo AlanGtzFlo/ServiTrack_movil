@@ -2,26 +2,29 @@ package com.example.servitrack_movil
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.servitrack_movil.Network.ApiClient
 import com.example.servitrack_movil.Network.LogoutRequest
 import com.example.servitrack_movil.Network.LogoutResponse
+import com.example.servitrack_movil.Network.User
 import com.example.servitrack_movil.databinding.ActivityMenuBinding
 import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MenuActivity : AppCompatActivity() {
+class MenuActivity : BaseActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMenuBinding
@@ -35,13 +38,45 @@ class MenuActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
         val nombre = prefs.getString("nombre", "Usuario")
         val id = prefs.getInt("id", 0)
+        val token = prefs.getString("access_token", null)
 
         val headerView = binding.navView.getHeaderView(0)
         val txtNombre = headerView.findViewById<TextView>(R.id.txtNombre)
         val txtMatricula = headerView.findViewById<TextView>(R.id.txtMatricula)
+        val imgUsuarioHeader = headerView.findViewById<ImageView>(R.id.imageView)
 
         txtNombre.text = nombre
         txtMatricula.text = "ID: $id"
+
+        // Cargar foto en el header si hay sesión
+        if (!token.isNullOrEmpty() && id != 0) {
+            ApiClient.retrofit.obtenerUsuarioPorId(id, "Bearer $token")
+                .enqueue(object : Callback<User> {
+                    override fun onResponse(call: Call<User>, response: Response<User>) {
+                        if (response.isSuccessful) {
+                            val user = response.body()
+                            if (!user?.foto.isNullOrEmpty()) {
+                                Glide.with(this@MenuActivity)
+                                    .load(user.foto)
+                                    .placeholder(R.drawable.ic_user)
+                                    .error(R.drawable.ic_user)
+                                    .circleCrop()
+                                    .skipMemoryCache(true)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                    .into(imgUsuarioHeader)
+                            } else {
+                                imgUsuarioHeader.setImageResource(R.drawable.ic_user)
+                            }
+                        } else {
+                            imgUsuarioHeader.setImageResource(R.drawable.ic_user)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<User>, t: Throwable) {
+                        imgUsuarioHeader.setImageResource(R.drawable.ic_user)
+                    }
+                })
+        }
 
         setSupportActionBar(binding.appBarMenu.toolbar)
 
@@ -49,6 +84,7 @@ class MenuActivity : AppCompatActivity() {
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_menu)
 
+        // Definimos cuáles son destinos raíz (hamburguesa)
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home,
@@ -58,31 +94,21 @@ class MenuActivity : AppCompatActivity() {
                 R.id.nav_listaReportes,
                 R.id.nav_empresas,
                 R.id.nav_cerrar_sesion
-            ), drawerLayout
+            ),
+            drawerLayout
         )
+
+        // Configura el toolbar con NavigationUI
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        val drawerToggle = ActionBarDrawerToggle(
-            this,
-            drawerLayout,
-            binding.appBarMenu.toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
-        drawerToggle.drawerArrowDrawable.color =
-            ContextCompat.getColor(this, R.color.hamburger_orange)
-        drawerLayout.addDrawerListener(drawerToggle)
-        drawerToggle.syncState()
-
-
+        // Listener para el menú lateral
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_cerrar_sesion -> {
                     cerrarSesion()
                     true
                 }
-
                 else -> {
                     navController.navigate(menuItem.itemId)
                     drawerLayout.closeDrawers()
@@ -90,11 +116,23 @@ class MenuActivity : AppCompatActivity() {
                 }
             }
         }
+
+        // Mantener el color naranja en el icono (hamburguesa o flecha)
+        binding.appBarMenu.toolbar.navigationIcon?.setTint(
+            ContextCompat.getColor(this, R.color.hamburger_orange)
+        )
+
+        // Si cambia la navegación, volver a aplicar el color
+        navController.addOnDestinationChangedListener { _, _, _ ->
+            binding.appBarMenu.toolbar.navigationIcon?.setTint(
+                ContextCompat.getColor(this, R.color.hamburger_orange)
+            )
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_menu)
-        return androidx.navigation.ui.NavigationUI.navigateUp(navController, appBarConfiguration)
+        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     private fun cerrarSesion() {
@@ -133,6 +171,4 @@ class MenuActivity : AppCompatActivity() {
             }
         })
     }
-
-
 }

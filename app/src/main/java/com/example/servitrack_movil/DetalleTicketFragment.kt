@@ -14,6 +14,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+import com.example.servitrack_movil.Network.UbicacionResponse
+import android.content.Context
 
 class DetalleTicketFragment : Fragment() {
 
@@ -53,7 +55,10 @@ class DetalleTicketFragment : Fragment() {
     }
 
     private fun obtenerTicketPorId(id: Int) {
-        val call = ApiClient.retrofit.getTicketById(id) // <-- Asegúrate de tener este método en tu interfaz
+        val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val token = prefs.getString("access_token", null) ?: ""
+        val authHeader = "Bearer $token"
+        val call = ApiClient.retrofit.getTicketById(id, authHeader) // <-- Asegúrate de tener este método en tu interfaz
 
         call.enqueue(object : Callback<TicketResponse> {
             override fun onResponse(call: Call<TicketResponse>, response: Response<TicketResponse>) {
@@ -79,8 +84,33 @@ class DetalleTicketFragment : Fragment() {
         txtEstado.text = "Estado: ${ticket.estado}"
         txtFecha.text = "Fecha límite: ${formatearFecha(ticket.fecha_limite)}"
         txtUbicacion.text = "Ubicación: ${ticket.ubicacion}"
-        txtCreador.text = "Creador: ${ticket.usuario_creador}"
-        txtTecnico.text = "Técnico: ${ticket.tecnico_asignado}"
+        txtCreador.text = "Id del creador: ${ticket.usuario_creador}"
+        txtTecnico.text = "Id del técnico: ${ticket.tecnico_asignado}"
+
+        obtenerNombreUbicacion(ticket.ubicacion.toInt())
+    }
+
+    private fun obtenerNombreUbicacion(id: Int) {
+
+        val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val token = prefs.getString("access_token", null) ?: ""
+        val authHeader = "Bearer $token"
+        ApiClient.retrofit.getUbicaciones(authHeader).enqueue(object : Callback<List<UbicacionResponse>> {
+            override fun onResponse(
+                call: Call<List<UbicacionResponse>>,
+                response: Response<List<UbicacionResponse>>
+            ) {
+                if (response.isSuccessful) {
+                    val ubicacion = response.body()?.find { it.id == id }
+                    txtUbicacion.text = "Ubicación: ${ubicacion?.nombre ?: "Desconocida"}"
+                } else {
+                    txtUbicacion.text = "Ubicación: Desconocida"
+                }
+            }
+            override fun onFailure(call: Call<List<UbicacionResponse>>, t: Throwable) {
+                txtUbicacion.text = "Ubicación: Error"
+            }
+        })
     }
 
     private fun formatearFecha(fecha: Date): String {

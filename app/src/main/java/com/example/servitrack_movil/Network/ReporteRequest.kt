@@ -9,7 +9,8 @@ data class ReporteRequest(
     val es_poliza: Boolean,
     val tipo_poliza: String?,
     val categoria: String,
-    val informacion_reporte: String?
+    val informacion_reporte: String?,
+    val foto: String?
 )
 
 data class ReporteResponse(

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -38,123 +39,81 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#006D77"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/tvTitulo1"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Generar Reporte"
-                android:textColor="#FFFFFF"
-                android:textSize="24dp"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                app:layout_constraintTop_toBottomOf="@id/layoutCategoria"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="8dp"/>
+                android:background="#006D77"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <!-- ID Ticket -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutIdTicket"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="ID Ticket"
-            app:hintTextColor="#000000"
-            app:layout_constraintTop_toBottomOf="@id/tvTitulo1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etIdTicket"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_edittext"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- ID Usuario o Matrícula -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutMatricula"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Matrícula"
-            app:hintTextColor="#000000"
-            app:layout_constraintTop_toBottomOf="@id/layoutIdTicket"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etMatricula"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_edittext"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- ID Ubicación -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutIdUbicacion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="ID Ubicación"
-            app:hintTextColor="#000000"
-            app:layout_constraintTop_toBottomOf="@id/layoutMatricula"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etIdUbicacion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_edittext"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- ID Empresa -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutIdEmpresa"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="ID Empresa"
-            app:hintTextColor="#000000"
-            app:layout_constraintTop_toBottomOf="@id/layoutIdUbicacion"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etIdEmpresa"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_edittext"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-            <!-- ID Equipo -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/layoutIdEquipo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="ID Equipo"
-                app:hintTextColor="#000000"
-                app:layout_constraintTop_toBottomOf="@id/layoutIdEmpresa"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="8dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etIdEquipo"
+                <!-- Ticket pendiente (Spinner) -->
+                <TextView
+                    android:id="@+id/tvTicket"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_edittext"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:text="Ticket pendiente"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="16dp" />
 
+                <Spinner
+                    android:id="@+id/spTicket"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_edittext"
+                    android:layout_marginTop="4dp" />
 
-        </LinearLayout>
+                <!-- Técnico (solo lectura, TextView) -->
+                <TextView
+                    android:id="@+id/tvLabelTecnico"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Matrícula"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="16dp" />
+
+                <EditText
+                    android:id="@+id/etTecnico"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_edittext"
+                    android:textColor="#000000"
+                    android:padding="12dp"
+                    android:hint="123456789"
+                    android:layout_marginTop="4dp" />
+
+                <!-- Ubicación (Spinner) -->
+                <TextView
+                    android:id="@+id/tvUbicacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ubicación"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="16dp" />
+
+                <Spinner
+                    android:id="@+id/spUbicacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_edittext"
+                    android:layout_marginTop="4dp" />
+
+                <!-- Empresa (Spinner) -->
+                <TextView
+                    android:id="@+id/tvEmpresa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Empresa"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="16dp" />
+
+                <Spinner
+                    android:id="@+id/spEmpresa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_edittext"
+                    android:layout_marginTop="4dp" />
+
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
@@ -169,258 +128,117 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#006D77"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <TextView
-                android:id="@+id/tvTitulo2"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Información del reporte"
-                android:textColor="#FFFFFF"
-                android:textSize="24dp"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                app:layout_constraintTop_toBottomOf="@id/layoutCategoria"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="8dp"/>
+                android:background="#006D77"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <!-- Descripción -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutDescripcion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Descripción"
-            app:hintTextColor="#000000"
-            app:layout_constraintTop_toBottomOf="@id/tvTitulo2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp">
+                <TextView
+                    android:id="@+id/tvTitulo2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Información del reporte"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24dp"
+                    android:textStyle="bold"
+                    android:textAlignment="center"
+                    android:layout_marginTop="8dp"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etDescripcion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:background="@drawable/rounded_edittext"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                <!-- Descripción -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutDescripcion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Descripción"
+                    app:hintTextColor="#000000"
+                    android:layout_marginTop="8dp">
 
-        <!-- Nivel de Prioridad -->
-        <TextView
-            android:id="@+id/tvPrioridad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nivel de Prioridad"
-            android:textColor="#FFFFFF"
-            app:layout_constraintTop_toBottomOf="@id/layoutDescripcion"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="8dp"/>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etDescripcion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/rounded_edittext"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <Spinner
-            android:id="@+id/spPrioridad"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvPrioridad"
-            tools:ignore="TouchTargetSizeCheck" />
+                <!-- Tiene Póliza -->
+                <TextView
+                    android:id="@+id/tvTienePoliza"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="¿Tiene póliza?"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="8dp" />
 
-        <!-- Fecha -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutFecha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Fecha"
-            app:hintTextColor="#000000"
-            app:layout_constraintTop_toBottomOf="@id/spPrioridad"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp">
+                <Switch
+                    android:id="@+id/switchPoliza"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etFecha"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="date"
-                android:background="@drawable/rounded_edittext"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                <!-- Tipo de Póliza -->
+                <TextView
+                    android:id="@+id/tvTipoPoliza"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tipo de Póliza"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="8dp" />
 
-        <!-- Tiene Póliza -->
-        <TextView
-            android:id="@+id/tvTienePoliza"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="¿Tiene póliza?"
-            android:textColor="#FFFFFF"
-            app:layout_constraintTop_toBottomOf="@id/layoutFecha"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="8dp"/>
+                <Spinner
+                    android:id="@+id/spTipoPoliza"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_edittext"
+                    android:visibility="gone" />
 
-        <Switch
-            android:id="@+id/switchPoliza"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tvTienePoliza"
-            tools:ignore="TouchTargetSizeCheck" />
+                <!-- Categoría -->
+                <TextView
+                    android:id="@+id/tvCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Categoría"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="8dp" />
 
-        <!-- Tipo de Póliza -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutTipoPoliza"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Tipo de Póliza"
-            app:hintTextColor="#000000"
-            app:layout_constraintTop_toBottomOf="@id/switchPoliza"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp">
+                <Spinner
+                    android:id="@+id/spCategoria"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_edittext" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etTipoPoliza"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_edittext"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                <!-- Información Reporte -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layoutInfoReporte"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Información del Reporte"
+                    app:hintTextColor="#000000"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="24dp">
 
-        <!-- Modelo Equipo -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutModelo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Modelo del equipo"
-            app:hintTextColor="#000000"
-            app:layout_constraintTop_toBottomOf="@id/layoutTipoPoliza"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etInfoReporte"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/rounded_edittext"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etModelo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_edittext"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnGuardar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:background="@drawable/rounded_button_orange"
+                    android:text="Guardar"
+                    android:textColor="@android:color/white" />
 
-        <!-- Marca Equipo -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutMarca"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Marca del equipo"
-            app:hintTextColor="#000000"
-            app:layout_constraintTop_toBottomOf="@id/layoutModelo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etMarca"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_edittext"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Título Técnico -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutTitulo"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Título Técnico"
-            app:hintTextColor="#000000"
-            app:layout_constraintTop_toBottomOf="@id/layoutMarca"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etTitulo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_edittext"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Categoría -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutCategoria"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Categoría"
-            app:hintTextColor="#000000"
-            app:layout_constraintTop_toBottomOf="@id/layoutTitulo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etCategoria"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_edittext"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Estado -->
-        <TextView
-            android:id="@+id/tvEstado"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Estado"
-            android:textColor="#FFFFFF"
-            app:layout_constraintTop_toBottomOf="@id/layoutCategoria"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="8dp"/>
-
-            <Spinner
-                android:id="@+id/spEstado"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvEstado"
-                tools:ignore="TouchTargetSizeCheck" />
-
-        <!-- Información Reporte -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutInfoReporte"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Información del Reporte"
-            app:hintTextColor="#000000"
-            app:layout_constraintTop_toBottomOf="@id/spEstado"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="24dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etInfoReporte"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine"
-                android:background="@drawable/rounded_edittext"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnGuardar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:background="@drawable/rounded_button_orange"
-                android:text="Guardar"
-                android:textColor="@android:color/white"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/etInfoReporte" />
-
-        </LinearLayout>
+            </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </ScrollView>

@@ -11,6 +11,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.PATCH
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 
 interface ApiService {
 
@@ -40,7 +41,7 @@ interface ApiService {
 
     //Todos los tickets
     @GET("api/tickets/")
-    fun getTickets(): Call<List<TicketResponse>>
+    fun getTickets(@Header("Authorization") token: String): Call<List<TicketResponse>>
 
     @GET("api/usuarios/{id}/")
     fun obtenerUsuarioPorId(
@@ -57,7 +58,11 @@ interface ApiService {
 
     //Ticket por ID
     @GET("api/tickets/{id}")
-    fun getTicketById(@Path("id") id: Int): Call<TicketResponse>
+    fun getTicketById(
+        @Path("id") id: Int,
+        @Header("Authorization") token: String
+    ): Call<TicketResponse>
+
 
     //Conteo de tickets
     @GET("/api/tickets/contar_estados_por_usuario")
@@ -65,10 +70,16 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<ConteoTicketsResponse>
 
+    //Generar PDF
+    @GET("api/reportes/{id}/exportar_reporte/")
+    fun exportarPdf(
+        @Path("id") id: Int,
+        @Header("Authorization") token: String
+    ): Call<ResponseBody>
 
     //Obtener Empresas
     @GET("api/empresas/")
-    fun getEmpresas(): Call<List<EmpresaResponse>>
+    fun getEmpresas(@Header("Authorization") token: String): Call<List<EmpresaResponse>>
 
     //Crear Reporte
     @Multipart
@@ -83,19 +94,15 @@ interface ApiService {
         @Part("es_poliza") esPoliza: RequestBody,
         @Part("tipo_poliza") tipoPoliza: RequestBody?,
         @Part("categoria") categoria: RequestBody,
-        @Part("informacion_reporte") informacionReporte: RequestBody
+        @Part("informacion_reporte") informacionReporte: RequestBody,
+        @Part foto: MultipartBody.Part?
     ): Call<ReporteResponse>
-
-
-
-
-
 
     @GET("api/reportes/{id}")
     fun getReporteById(@Path("id") id: Int): Call<ReporteResponse>
 
     @GET("api/reportes/")
-    fun getReportes(): Call<List<ReporteResponse>>
+    fun getReportes(@Header("Authorization") token: String): Call<List<ReporteResponse>>
 
 
     //Conteo Reportes
@@ -104,13 +111,13 @@ interface ApiService {
 
     // Ubicaciones
     @GET("api/ubicaciones/")
-    fun getUbicaciones(): Call<List<UbicacionResponse>>
+    fun getUbicaciones(@Header("Authorization") token: String): Call<List<UbicacionResponse>>
 
     @GET("api/clientes/")
-    fun getClientes(): Call<List<Cliente>>
+    fun getClientes(@Header("Authorization") token: String): Call<List<Cliente>>
 
     @GET("api/clientes/{id}/")
-    fun getCliente(@Path("id") id: Int): Call<Cliente>
+    fun getCliente(@Path("id") id: Int,@Header("Authorization") token: String): Call<Cliente>
 }
 
 

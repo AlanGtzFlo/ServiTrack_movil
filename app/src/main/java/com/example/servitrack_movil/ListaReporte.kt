@@ -14,6 +14,7 @@ import com.example.servitrack_movil.databinding.FragmentListaReporteBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.content.Context
 
 class ListaReporteFragment : Fragment() {
 
@@ -47,7 +48,12 @@ class ListaReporteFragment : Fragment() {
     }
 
     private fun obtenerReportesDesdeAPI() {
-        val call = ApiClient.retrofit.getReportes()
+
+        val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val token = prefs.getString("access_token", null) ?: ""
+        val authHeader = "Bearer $token"
+
+        val call = ApiClient.retrofit.getReportes("Bearer $token")
 
         call.enqueue(object : Callback<List<ReporteResponse>> {
             override fun onResponse(call: Call<List<ReporteResponse>>, response: Response<List<ReporteResponse>>) {
@@ -56,7 +62,7 @@ class ListaReporteFragment : Fragment() {
                     listaReportes.addAll(response.body()!!.map {
                         Reporte(
                             id = it.id,
-                            titulo = it.categoria,
+                            titulo = it.descripcion,
                             descripcion = it.descripcion,
                             prioridad = if (it.es_poliza) "Alta" else "Normal",
                             estado = if (it.es_poliza) "Póliza" else "Normal",

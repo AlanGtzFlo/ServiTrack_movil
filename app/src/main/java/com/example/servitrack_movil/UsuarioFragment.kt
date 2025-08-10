@@ -28,7 +28,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.net.URL
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+
 
 class UsuarioFragment : Fragment() {
 
@@ -50,7 +51,7 @@ class UsuarioFragment : Fragment() {
                         .circleCrop()
                         .into(imgUsuario)
 
-                    cambiarFotoUsuario(uri)  // Llamamos al método corregido
+                    cambiarFotoUsuario(uri)
                 }
             }
         }
@@ -66,7 +67,6 @@ class UsuarioFragment : Fragment() {
         val token = prefs.getString("access_token", null)
         val id = prefs.getInt("id", -1)
 
-        // Referenciar elementos UI
         imgUsuario = view.findViewById(R.id.imgUsuario)
         val txtUsuario = view.findViewById<TextView>(R.id.txtUsuario)
         val txtCorreo = view.findViewById<TextView>(R.id.txtCorreo)
@@ -78,66 +78,42 @@ class UsuarioFragment : Fragment() {
         val txtTelefono = view.findViewById<TextView>(R.id.txtTelefonoUsuario)
         val txtDomicilio = view.findViewById<TextView>(R.id.txtDomicilioUsuario)
 
-        // Nombre archivo local para la foto del usuario
-        val nombreArchivoFoto = "foto_usuario_${id}.jpg"
-
         if (!token.isNullOrEmpty() && id != -1) {
-            ApiClient.retrofit.obtenerUsuarioPorId(id, "Bearer $token")
-                .enqueue(object : Callback<User> {
-                    override fun onResponse(call: Call<User>, response: Response<User>) {
-                        if (response.isSuccessful) {
-                            val user = response.body()
+            cargarDatosUsuario(id, token,
+                onSuccess = { user ->
+                    txtUsuario.text = user.nombre
+                    txtCorreo.text = user.correo
+                    txtIdUsuario.text = "Matrícula:\n${user.id}"
+                    txtNombreUsuario.text = "Nombre:\n${user.nombre}"
+                    txtCorreoUsuario.text = "Correo:\n${user.correo}"
+                    txtPuestoUsuario.text = "Puesto:\n${user.rol}"
+                    txtFechaIngreso.text = "Ingreso:\n${user.fecha_registro.substringBefore("T")}"
+                    txtTelefono.text = "Teléfono:\n${user.telefono}"
+                    txtDomicilio.text = "Domicilio:\n${user.direccion}"
 
-                            txtUsuario.text = user?.nombre ?: "Sin nombre"
-                            txtCorreo.text = user?.correo ?: "Sin correo"
-                            txtIdUsuario.text = "Matrícula:\n${user?.id ?: "Desconocido"}"
-                            txtNombreUsuario.text = "Nombre:\n${user?.nombre ?: "Desconocido"}"
-                            txtCorreoUsuario.text = "Correo:\n${user?.correo ?: "Desconocido"}"
-                            txtPuestoUsuario.text = "Puesto:\n${user?.rol ?: "Desconocido"}"
-                            txtFechaIngreso.text = "Ingreso:\n${user?.fecha_registro?.substringBefore("T") ?: "Desconocido"}"
-                            txtTelefono.text = "Teléfono:\n${user?.telefono ?: "Sin teléfono"}"
-                            txtDomicilio.text = "Domicilio:\n${user?.direccion ?: "Sin domicilio"}"
+                    Log.d("UsuarioFragment", "URL foto usuario: ${user.foto}")
 
-                            val archivoLocal = File(requireContext().filesDir, nombreArchivoFoto)
-                            if (archivoLocal.exists()) {
-                                Log.d("UsuarioFragment", "Archivo local encontrado: ${archivoLocal.absolutePath}, tamaño: ${archivoLocal.length()} bytes")
-                                Glide.with(requireContext())
-                                    .load(archivoLocal)
-                                    .placeholder(R.drawable.ic_user)
-                                    .error(R.drawable.ic_user)
-                                    .circleCrop()
-                                    .into(imgUsuario)
-                            } else if (!user?.foto.isNullOrEmpty()) {
-                                Log.d("UsuarioFragment", "Archivo local NO existe, cargando desde URL y guardando localmente")
-                                Glide.with(requireContext())
-                                    .load(user.foto)
-                                    .placeholder(R.drawable.ic_user)
-                                    .error(R.drawable.ic_user)
-                                    .circleCrop()
-                                    .into(imgUsuario)
 
-                                // Guardar imagen localmente para la próxima vez
-                                guardarImagenLocalmente(requireContext(), user.foto, nombreArchivoFoto) {
-                                    Log.d("UsuarioFragment", "Imagen guardada localmente en ${it.absolutePath}")
-                                }
-                            } else {
-                                // No hay foto ni local ni remota, carga placeholder
-                                imgUsuario.setImageResource(R.drawable.ic_user)
-                            }
-                        } else {
-                            Log.e("UsuarioFragment", "Error al obtener usuario: ${response.code()}")
-                            Toast.makeText(requireContext(), "Error al cargar usuario", Toast.LENGTH_SHORT).show()
-                        }
+                    if (!user.foto.isNullOrEmpty()) {
+                        Glide.with(requireContext())
+                            .load(user.foto)
+                            .placeholder(R.drawable.ic_user)
+                            .error(R.drawable.ic_user)
+                            .circleCrop()
+                            .skipMemoryCache(true)  // ignorar cache memoria
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)  // ignorar cache disco
+                            .into(imgUsuario)
+                    } else {
+                        imgUsuario.setImageResource(R.drawable.ic_user)
                     }
-
-                    override fun onFailure(call: Call<User>, t: Throwable) {
-                        Log.e("UsuarioFragment", "Fallo de conexión: ${t.message}", t)
-                        Toast.makeText(requireContext(), "Error de red", Toast.LENGTH_SHORT).show()
-                    }
-                })
+                },
+                onError = {
+                    Toast.makeText(requireContext(), "Error al cargar usuario", Toast.LENGTH_SHORT).show()
+                    imgUsuario.setImageResource(R.drawable.ic_user)
+                }
+            )
         }
 
-        // Clic para cambiar imagen
         imgUsuario.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             imagePickerLauncher.launch(intent)
@@ -151,21 +127,23 @@ class UsuarioFragment : Fragment() {
         return view
     }
 
-    private fun guardarImagenLocalmente(context: Context, url: String, nombreArchivo: String, onSuccess: (File) -> Unit) {
-        Thread {
-            try {
-                val input = URL(url).openStream()
-                val archivo = File(context.filesDir, nombreArchivo)
-                archivo.outputStream().use { output ->
-                    input.copyTo(output)
+    private fun cargarDatosUsuario(id: Int, token: String, onSuccess: (User) -> Unit, onError: () -> Unit) {
+        ApiClient.retrofit.obtenerUsuarioPorId(id, "Bearer $token")
+            .enqueue(object : Callback<User> {
+                override fun onResponse(call: Call<User>, response: Response<User>) {
+                    if (response.isSuccessful) {
+                        response.body()?.let {
+                            onSuccess(it)
+                        } ?: onError()
+                    } else {
+                        onError()
+                    }
                 }
-                activity?.runOnUiThread {
-                    onSuccess(archivo)
+
+                override fun onFailure(call: Call<User>, t: Throwable) {
+                    onError()
                 }
-            } catch (e: Exception) {
-                Log.e("GuardarImagen", "Error: ${e.message}")
-            }
-        }.start()
+            })
     }
 
     private fun cambiarFotoUsuario(uri: Uri) {
@@ -191,26 +169,41 @@ class UsuarioFragment : Fragment() {
             val requestFile = tempFile.asRequestBody("image/*".toMediaTypeOrNull())
             val body = MultipartBody.Part.createFormData("foto", tempFile.name, requestFile)
 
-            val call = ApiClient.retrofit.cambiarFoto("Bearer $token", id, body)
-            call.enqueue(object : Callback<Void> {
+            ApiClient.retrofit.cambiarFoto("Bearer $token", id, body).enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         Toast.makeText(context, "Foto actualizada correctamente", Toast.LENGTH_SHORT).show()
+
+                        // Volver a cargar datos usuario para actualizar imagen
+                        cargarDatosUsuario(id, token,
+                            onSuccess = { user ->
+                                if (!user.foto.isNullOrEmpty()) {
+                                    Glide.with(this@UsuarioFragment)
+                                        .load(user.foto)
+                                        .placeholder(R.drawable.ic_user)
+                                        .error(R.drawable.ic_user)
+                                        .circleCrop()
+                                        .skipMemoryCache(true)
+                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                        .into(imgUsuario)
+                                }
+                            },
+                            onError = {
+                                Toast.makeText(context, "Error al actualizar imagen", Toast.LENGTH_SHORT).show()
+                            }
+                        )
                     } else {
-                        val error = response.errorBody()?.string()
-                        Log.e("Foto", "Error: ${response.code()} - $error")
                         Toast.makeText(context, "Error al actualizar foto: ${response.code()}", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<Void>, t: Throwable) {
-                    Log.e("Foto", "Fallo de red: ${t.message}", t)
                     Toast.makeText(context, "Fallo de conexión", Toast.LENGTH_SHORT).show()
                 }
             })
+
         } catch (e: Exception) {
             Toast.makeText(context, "Error al preparar imagen: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
-
 }

@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.content.Context
 
 class ListaUbicacion : Fragment() {
 
@@ -53,7 +54,10 @@ class ListaUbicacion : Fragment() {
 
 
     private fun cargarUbicaciones() {
-        ApiClient.retrofit.getUbicaciones().enqueue(object : Callback<List<UbicacionResponse>> {
+        val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val token = prefs.getString("access_token", null) ?: ""
+        val authHeader = "Bearer $token"
+        ApiClient.retrofit.getUbicaciones(authHeader).enqueue(object : Callback<List<UbicacionResponse>> {
             override fun onResponse(
                 call: Call<List<UbicacionResponse>>,
                 response: Response<List<UbicacionResponse>>
