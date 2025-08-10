@@ -23,6 +23,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
+import android.graphics.Color
+import com.github.mikephil.charting.components.XAxis
+
 
 class ListaTicketFragment : Fragment() {
 
@@ -60,7 +63,7 @@ class ListaTicketFragment : Fragment() {
         val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val token = prefs.getString("access_token", null) ?: ""
         val authHeader = "Bearer $token"
-        val call = ApiClient.retrofit.getTickets(authHeader)
+        val call = ApiClient.retrofit.getTicketsByUser(authHeader)
 
         call.enqueue(object : Callback<List<TicketResponse>> {
             override fun onResponse(
@@ -123,9 +126,9 @@ class ListaTicketFragment : Fragment() {
     private fun mostrarGraficaDesdeConteo(conteo: ConteoTicketsResponse) {
         Log.d("GRAFICA", "Pendiente: ${conteo.pendiente}, En proceso: ${conteo.en_proceso}, Completado: ${conteo.completado}")
 
-        val pendiente = conteo.pendiente.takeIf { it > 0 } ?: 2
-        val enProceso = conteo.en_proceso.takeIf { it > 0 } ?: 1
-        val completado = conteo.completado.takeIf { it > 0 } ?: 3
+        val pendiente = conteo.pendiente
+        val enProceso = conteo.en_proceso
+        val completado = conteo.completado
 
         val entries = listOf(
             BarEntry(0f, pendiente.toFloat()),
@@ -133,15 +136,15 @@ class ListaTicketFragment : Fragment() {
             BarEntry(2f, completado.toFloat())
         )
 
-        val dataSet = BarDataSet(entries, "Tickets")
-        dataSet.colors = listOf(
-            android.graphics.Color.parseColor("#F4A300"), // Pendiente
-            android.graphics.Color.parseColor("#006D77"), // En proceso
-            android.graphics.Color.parseColor("#43A047")  // Completado
-        )
+        val dataSet = BarDataSet(entries, "Tickets").apply {
+            colors = listOf(
+                Color.parseColor("#F4A300"), // Pendiente
+                Color.parseColor("#006D77"), // En proceso
+                Color.parseColor("#43A047")  // Completado
+            )
+        }
 
-        val data = BarData(dataSet)
-        data.barWidth = 0.9f
+        val data = BarData(dataSet).apply { barWidth = 0.9f }
 
         barChart.data = data
         barChart.setFitBars(true)
@@ -152,7 +155,7 @@ class ListaTicketFragment : Fragment() {
             granularity = 1f
             isGranularityEnabled = true
             setDrawGridLines(false)
-            position = com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
+            position = XAxis.XAxisPosition.BOTTOM
         }
 
         barChart.axisLeft.setDrawGridLines(false)

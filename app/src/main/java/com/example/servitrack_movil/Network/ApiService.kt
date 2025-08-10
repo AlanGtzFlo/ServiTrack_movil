@@ -63,6 +63,11 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<TicketResponse>
 
+    //Ticket por usuario
+    @GET("api/tickets/tickets_usuario/")
+    fun getTicketsByUser(
+        @Header("Authorization") token: String
+    ): Call<List<TicketResponse>>
 
     //Conteo de tickets
     @GET("/api/tickets/contar_estados_por_usuario")
@@ -81,7 +86,6 @@ interface ApiService {
     @GET("api/empresas/")
     fun getEmpresas(@Header("Authorization") token: String): Call<List<EmpresaResponse>>
 
-    //Crear Reporte
     @Multipart
     @POST("api/reportes/")
     fun createReporte(
@@ -95,8 +99,10 @@ interface ApiService {
         @Part("tipo_poliza") tipoPoliza: RequestBody?,
         @Part("categoria") categoria: RequestBody,
         @Part("informacion_reporte") informacionReporte: RequestBody,
-        @Part foto: MultipartBody.Part?
+        @Part("mensajes") mensajes: RequestBody,
     ): Call<ReporteResponse>
+
+
 
     @GET("api/reportes/{id}")
     fun getReporteById(@Path("id") id: Int): Call<ReporteResponse>
