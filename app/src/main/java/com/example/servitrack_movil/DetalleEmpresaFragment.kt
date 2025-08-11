@@ -33,7 +33,7 @@ class DetalleEmpresaFragment : Fragment() {
 
         binding.txtEmpresaId.text = "ID de la empresa:\n${empresa.id}"
         binding.txtTituloDetalle.text = "Nombre:\n${empresa.nombre}"
-        binding.txtEstadoDetalle.text = "Estatus:\n${empresa.estatus}"
+        binding.txtEstadoDetalle.text = "Estatus:\n${if (empresa.estatus) "Activa" else "Inactiva"}"
         binding.txtTipoPoliza.text = "Tipo de póliza:\n${empresa.tipo_poliza}"
         binding.txtFechaInicioPoliza.text = "Inicio de póliza:\n${empresa.fecha_inicio_poliza}"
         binding.txtFechaFinPoliza.text = "Fin de póliza:\n${empresa.fecha_fin_poliza}"

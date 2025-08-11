@@ -1,11 +1,13 @@
 package com.example.servitrack_movil
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +16,7 @@ import com.example.servitrack_movil.Network.ApiClient
 import com.example.servitrack_movil.Network.ConteoTicketsResponse
 import com.example.servitrack_movil.Network.TicketResponse
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
@@ -23,15 +26,15 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
-import android.graphics.Color
-import com.github.mikephil.charting.components.XAxis
-
 
 class ListaTicketFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: TicketAdapter
     private lateinit var barChart: BarChart
+
+    // Lista original con todos los tickets para filtrar
+    private var listaTicketsOriginal = mutableListOf<Ticket>()
     private var listaTickets = mutableListOf<Ticket>()
 
     override fun onCreateView(
@@ -43,6 +46,10 @@ class ListaTicketFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerTickets)
         barChart = view.findViewById(R.id.barChart)
 
+        val btnOpen = view.findViewById<AppCompatButton>(R.id.btnOpen)
+        val btnInProgress = view.findViewById<AppCompatButton>(R.id.btnInProgress)
+        val btnResolved = view.findViewById<AppCompatButton>(R.id.btnResolved)
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         adapter = TicketAdapter(listaTickets) { ticket ->
@@ -53,8 +60,22 @@ class ListaTicketFragment : Fragment() {
 
         recyclerView.adapter = adapter
 
+        // Obtener tickets y conteo al iniciar
         obtenerTicketsDesdeAPI()
         obtenerConteoDesdeAPI()
+
+        // Configurar listeners de botones para filtrar
+        btnOpen.setOnClickListener {
+            filtrarTicketsPorEstado("pendiente") // Cambia el texto si el estado en API es distinto
+        }
+
+        btnInProgress.setOnClickListener {
+            filtrarTicketsPorEstado("en_proceso") // Cambia según el estado real
+        }
+
+        btnResolved.setOnClickListener {
+            filtrarTicketsPorEstado("completado") // Cambia según el estado real
+        }
 
         return view
     }
@@ -72,8 +93,8 @@ class ListaTicketFragment : Fragment() {
             ) {
                 if (response.isSuccessful && response.body() != null) {
                     val responseTickets = response.body()!!
-                    listaTickets.clear()
-                    listaTickets.addAll(responseTickets.map {
+                    listaTicketsOriginal.clear()
+                    listaTicketsOriginal.addAll(responseTickets.map {
                         Ticket(
                             id = it.id.toString(),
                             titulo = it.titulo,
@@ -81,6 +102,9 @@ class ListaTicketFragment : Fragment() {
                             fecha = formatearFecha(it.fecha_limite)
                         )
                     })
+                    // Inicialmente mostrar todos los tickets
+                    listaTickets.clear()
+                    listaTickets.addAll(listaTicketsOriginal)
                     adapter.notifyDataSetChanged()
                 } else {
                     Log.e("API_ERROR", "Respuesta no exitosa: ${response.code()}")
@@ -91,6 +115,15 @@ class ListaTicketFragment : Fragment() {
                 Log.e("API_ERROR", "Error de red: ${t.message}", t)
             }
         })
+    }
+
+    private fun filtrarTicketsPorEstado(estado: String) {
+        val filtrados = listaTicketsOriginal.filter {
+            it.estado.equals(estado, ignoreCase = true)
+        }
+        listaTickets.clear()
+        listaTickets.addAll(filtrados)
+        adapter.notifyDataSetChanged()
     }
 
     private fun obtenerConteoDesdeAPI() {
@@ -138,9 +171,9 @@ class ListaTicketFragment : Fragment() {
 
         val dataSet = BarDataSet(entries, "Tickets").apply {
             colors = listOf(
-                Color.parseColor("#F4A300"), // Pendiente
+                Color.parseColor("#F4A300"), // Pendiente (Abiertos)
                 Color.parseColor("#006D77"), // En proceso
-                Color.parseColor("#43A047")  // Completado
+                Color.parseColor("#43A047")  // Completado (Resueltos)
             )
         }
 

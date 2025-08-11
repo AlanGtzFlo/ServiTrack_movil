@@ -23,7 +23,7 @@ class GenerarReporteFragment : Fragment() {
     private val tiposPoliza = listOf("Completa", "Preventivos", "Correctivos")
 
     private val categoriasVisibles = listOf("En asignación", "Preventivo", "Predictivo", "Correctivo")
-    private val categoriasBackend = listOf("en_asignacion", "preventivo", "predictivo", "correctivo")
+    private val categoriasBackend = listOf("en asignación", "preventivo", "predictivo", "correctivo")
 
     // Extensión para convertir String a RequestBody
     private fun String.toRequestBody(): RequestBody = this.toRequestBody("text/plain".toMediaType())
@@ -82,14 +82,18 @@ class GenerarReporteFragment : Fragment() {
             if (!validarCampos(spTicket, spUbicacion, spEmpresa, descripcion, infoReporte, tienePoliza, spTipoPoliza, etTecnico)) return@setOnClickListener
 
             val ticketId = tickets[spTicket.selectedItemPosition].id.toString().toRequestBody()
-            val tecnicoNombre = etTecnico.text.toString().toRequestBody() // texto manual
+            val tecnicoNombre = etTecnico.text.toString().toRequestBody()
             val ubicacionId = ubicaciones[spUbicacion.selectedItemPosition].id.toString().toRequestBody()
             val empresaId = empresas[spEmpresa.selectedItemPosition].id.toString().toRequestBody()
             val descripcionBody = descripcion.text.toString().toRequestBody()
             val categoriaBody = categoriasBackend[spCategoria.selectedItemPosition].toRequestBody()
             val infoReporteBody = infoReporte.text.toString().toRequestBody()
             val esPolizaBody = tienePoliza.isChecked.toString().toRequestBody()
-            val tipoPolizaBody = if (tienePoliza.isChecked) tiposPoliza[spTipoPoliza.selectedItemPosition].toRequestBody() else null
+            val tipoPolizaBody = if (tienePoliza.isChecked) {
+                tiposPoliza[spTipoPoliza.selectedItemPosition].toRequestBody()
+            } else {
+                "".toRequestBody()
+            }
 
             ApiClient.retrofit.createReporte(
                 token = "Bearer $token",

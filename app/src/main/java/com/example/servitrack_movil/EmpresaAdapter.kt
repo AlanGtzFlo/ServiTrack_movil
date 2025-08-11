@@ -15,7 +15,7 @@ class EmpresaAdapter(
 
         fun bind(empresa: Empresa) {
             binding.txtNombreEmpresa.text = empresa.nombre
-            binding.txtEstadoEmpresa.text = "Estado: ${empresa.estatus}"
+            binding.txtEstadoEmpresa.text = "Estado: ${if (empresa.estatus) "Activa" else "Inactiva"}"
             binding.txtRFC.text = "ID: ${empresa.id}"
 
             binding.root.setOnClickListener {

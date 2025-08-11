@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class Empresa(
     val id: String,
     val nombre: String,
-    val estatus: String,
+    val estatus: Boolean,
     val tipo_poliza: String,
     val fecha_inicio_poliza: String,
     val fecha_fin_poliza: String

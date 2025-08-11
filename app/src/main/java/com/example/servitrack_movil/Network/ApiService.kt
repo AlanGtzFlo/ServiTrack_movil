@@ -102,11 +102,15 @@ interface ApiService {
         @Part("informacion_reporte") informacionReporte: RequestBody
     ): Call<ReporteResponse>
 
-    @POST ("api/mesajes_reporte/")
+    @Multipart
+    @POST("api/mensajes_reporte/")
     fun createMensaje(
         @Header("Authorization") token: String,
-        @Body mensajeRequest: MensajeRequest
+        @Part("reporte") reporte: RequestBody,
+        @Part("mensaje") mensaje: RequestBody,
+        @Part imagen: MultipartBody.Part? = null
     ): Call<Void>
+
 
     @GET("api/mensajes_reporte/mensajes_por_reporte_id/")
     fun getMensajesPorReporteId(
