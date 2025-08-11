@@ -18,6 +18,8 @@ import java.io.File
 import java.io.FileOutputStream
 import android.content.Context
 import com.example.servitrack_movil.Network.UbicacionResponse
+import androidx.appcompat.widget.AppCompatButton
+import androidx.navigation.fragment.findNavController
 
 
 
@@ -41,6 +43,11 @@ class DetalleReporteFragment : Fragment() {
 
         val reporte = args.reporte
 
+        binding.btnListadoMensajes.setOnClickListener {
+            val action = DetalleReporteFragmentDirections
+                .actionDetalleReporteFragmentToListadoMensajesFragment(reporteId = reporte.id, reporteNombre = reporte.titulo)
+            findNavController().navigate(action)
+        }
 
         binding.txtTicketId.text = "ID:\n${reporte.id}"
         binding.txtTitulo.text = "Título:\n${reporte.titulo}"
@@ -59,6 +66,7 @@ class DetalleReporteFragment : Fragment() {
         }
     }
 
+
     private fun exportarPdf(idReporte: Int) {
         val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val token = prefs.getString("access_token", null)
@@ -70,23 +78,39 @@ class DetalleReporteFragment : Fragment() {
 
         val bearerToken = "Bearer $token"
 
-        ApiClient.retrofit.exportarPdf(idReporte, bearerToken).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                // Log para depurar
-                android.util.Log.d("API_RESPONSE", "Código: ${response.code()}")
+        ApiClient.retrofit.exportarPdf(idReporte, bearerToken)
+            .enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    // Log para depurar
+                    android.util.Log.d("API_RESPONSE", "Código: ${response.code()}")
 
-                if (response.isSuccessful && response.body() != null) {
-                    guardarPdfEnDispositivo(response.body()!!)
-                    Toast.makeText(requireContext(), "PDF generado correctamente", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(requireContext(), "Error al generar PDF. Código: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    if (response.isSuccessful && response.body() != null) {
+                        guardarPdfEnDispositivo(response.body()!!)
+                        Toast.makeText(
+                            requireContext(),
+                            "PDF generado correctamente",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            "Error al generar PDF. Código: ${response.code()}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error de conexión: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Error de conexión: ${t.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
     }
 
 
@@ -99,7 +123,11 @@ class DetalleReporteFragment : Fragment() {
             val fos = FileOutputStream(file)
             fos.write(body.bytes())
             fos.close()
-            Toast.makeText(requireContext(), "Archivo guardado en: ${file.absolutePath}", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                requireContext(),
+                "Archivo guardado en: ${file.absolutePath}",
+                Toast.LENGTH_LONG
+            ).show()
         } catch (e: Exception) {
             Toast.makeText(requireContext(), "Error al guardar archivo", Toast.LENGTH_SHORT).show()
         }
@@ -109,24 +137,31 @@ class DetalleReporteFragment : Fragment() {
         val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val token = prefs.getString("access_token", null) ?: ""
         val authHeader = "Bearer $token"
-        ApiClient.retrofit.getUbicaciones(authHeader).enqueue(object : Callback<List<UbicacionResponse>> {
-            override fun onResponse(
-                call: Call<List<UbicacionResponse>>,
-                response: Response<List<UbicacionResponse>>
-            ) {
-                if (response.isSuccessful) {
-                    val ubicacion = response.body()?.find { it.id == id }
-                    binding.txtUbicacion.text = "Ubicación: ${ubicacion?.nombre ?: "Desconocida"}"
-                } else {
-                    binding.txtUbicacion.text = "Ubicación: Desconocida"
+        ApiClient.retrofit.getUbicaciones(authHeader)
+            .enqueue(object : Callback<List<UbicacionResponse>> {
+                override fun onResponse(
+                    call: Call<List<UbicacionResponse>>,
+                    response: Response<List<UbicacionResponse>>
+                ) {
+                    if (!isAdded || _binding == null) return  // Evita crash si fragmento no está activo
+
+                    if (response.isSuccessful) {
+                        val ubicacion = response.body()?.find { it.id == id }
+                        binding.txtUbicacion.text =
+                            "Ubicación: ${ubicacion?.nombre ?: "Desconocida"}"
+                    } else {
+                        binding.txtUbicacion.text = "Ubicación: Desconocida"
+                    }
                 }
-            }
-            override fun onFailure(call: Call<List<UbicacionResponse>>, t: Throwable) {
-                binding.txtUbicacion.text = "Ubicación: Error"
-            }
-        })
+
+                override fun onFailure(call: Call<List<UbicacionResponse>>, t: Throwable) {
+                    if (!isAdded || _binding == null) return
+                    binding.txtUbicacion.text = "Ubicación: Error"
+                }
+            })
     }
 
+    // Fuera de todas las funciones, dentro de la clase:
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

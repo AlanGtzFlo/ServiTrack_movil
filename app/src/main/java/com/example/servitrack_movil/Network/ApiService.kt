@@ -12,6 +12,7 @@ import retrofit2.http.PATCH
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -98,18 +99,34 @@ interface ApiService {
         @Part("es_poliza") esPoliza: RequestBody,
         @Part("tipo_poliza") tipoPoliza: RequestBody?,
         @Part("categoria") categoria: RequestBody,
-        @Part("informacion_reporte") informacionReporte: RequestBody,
-        @Part("mensajes") mensajes: RequestBody,
+        @Part("informacion_reporte") informacionReporte: RequestBody
     ): Call<ReporteResponse>
 
+    @POST ("api/mesajes_reporte/")
+    fun createMensaje(
+        @Header("Authorization") token: String,
+        @Body mensajeRequest: MensajeRequest
+    ): Call<Void>
+
+    @GET("api/mensajes_reporte/mensajes_por_reporte_id/")
+    fun getMensajesPorReporteId(
+        @Query("reporte") reporteId: Int,
+        @Header("Authorization") token: String
+    ): Call<List<MensajeResponse>>
+
+
+    @GET("api/mensajes_reporte/{id}/")
+    fun getMensajePorId(
+        @Path("id") id: Int,
+        @Header("Authorization") token: String
+    ): Call<MensajeResponse>
 
 
     @GET("api/reportes/{id}")
     fun getReporteById(@Path("id") id: Int): Call<ReporteResponse>
 
-    @GET("api/reportes/")
+    @GET(/* value = */ "api/reportes/")
     fun getReportes(@Header("Authorization") token: String): Call<List<ReporteResponse>>
-
 
     //Conteo Reportes
     @GET("api/reportes/conteo_por_tecnico/?tecnico={id}")

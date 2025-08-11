@@ -5,6 +5,8 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/nav_home">
 
+
+
     <fragment
         android:id="@+id/nav_home"
         android:name="com.example.servitrack_movil.ui.home.HomeFragment"
@@ -61,6 +63,65 @@
                 app:argType="com.example.servitrack_movil.Reporte"
                 app:nullable="false" />
         </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_listaMensajes"
+        android:name="com.example.servitrack_movil.ListaMensajes"
+        android:label="Lista de mensajes"
+        tools:layout="@layout/fragment_lista_mensajes">
+
+        <argument
+            android:name="reporteId"
+            app:argType="integer" />
+
+        <argument
+            android:name="reporteNombre"
+            app:argType="string"
+            app:nullable="true" />
+
+        <action
+            android:id="@+id/action_listaMensajesFragment_to_detalleMensajeFragment"
+            app:destination="@id/detalleMensaje" />
+
+        <action
+            android:id="@+id/action_listaMensajesFragment_to_generarMensajeFragment"
+            app:destination="@id/generarMensajeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/generarMensajeFragment"
+        android:name="com.example.servitrack_movil.GenerarMensaje"
+        android:label="Generar mensaje"
+        tools:layout="@layout/fragment_generar_mensaje">
+
+        <argument
+            android:name="reporteId"
+            app:argType="integer"
+            app:nullable="false" />
+
+        <argument
+            android:name="reporteNombre"
+            app:argType="string"
+            app:nullable="false" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/detalleMensaje"
+        android:name="com.example.servitrack_movil.DetalleMensaje"
+        android:label="Detalle del mensaje"
+        tools:layout="@layout/fragment_detalle_mensaje">
+
+        <argument
+            android:name="mensajeId"
+            app:argType="string"
+            app:nullable="false" />
+
+        <argument
+            android:name="nombreReporte"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 
 
@@ -143,6 +204,13 @@
             app:argType="com.example.servitrack_movil.Reporte"
             app:nullable="false" />
 
+        <action
+            android:id="@+id/action_detalleReporteFragment_to_listadoMensajesFragment"
+            app:destination="@id/nav_listaMensajes" >
+            <argument
+                android:name="reporteId"
+                app:argType="integer" />
+        </action>
 
     </fragment>
 

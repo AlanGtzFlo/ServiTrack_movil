@@ -9,8 +9,7 @@ data class ReporteRequest(
     val es_poliza: Boolean,
     val tipo_poliza: String?,
     val categoria: String,
-    val informacion_reporte: String?,
-    val foto: String?
+    val informacion_reporte: String?
 )
 
 data class ReporteResponse(
@@ -24,5 +23,20 @@ data class ReporteResponse(
     val tipo_poliza: String?,
     val categoria: String,
     val informacion_reporte: String?,
-    val fecha_creacion: String
+    val fecha_creacion: String,
+    val mensajes: List<MensajeResponse>
+)
+
+data class MensajeRequest(
+    val reporte: Int,
+    val mensaje: String,
+    val imagen: String? = null
+)
+
+data class MensajeResponse(
+    val id: Int,
+    val reporte: Int,
+    val mensaje: String,
+    val imagen: String? = null,
+    val fecha: String
 )

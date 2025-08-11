@@ -102,7 +102,6 @@ class GenerarReporteFragment : Fragment() {
                 tipoPoliza = tipoPolizaBody,
                 categoria = categoriaBody,
                 informacionReporte = infoReporteBody,
-                foto = null // Aquí puedes agregar la lógica para manejar fotos si es necesario
             ).enqueue(object : Callback<ReporteResponse> {
                 override fun onResponse(call: Call<ReporteResponse>, response: Response<ReporteResponse>) {
                     if (response.isSuccessful) {
