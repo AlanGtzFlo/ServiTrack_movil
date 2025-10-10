@@ -5,14 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import android.widget.TextView
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.servitrack_movil.ConsejoAdapter
-import com.example.servitrack_movil.Consejos
-import com.example.servitrack_movil.R
 import com.example.servitrack_movil.databinding.FragmentHomeBinding
 import com.example.servitrack_movil.Network.ApiClient
 import com.example.servitrack_movil.Network.ConteoTicketsResponse
@@ -47,21 +42,9 @@ class HomeFragment : Fragment() {
         val token = prefs.getString("access_token", null)
 
         // Saludos y fecha
-        binding.txtSaludo.text = "¡Bienvenido, $nombre!"
-        binding.txtMatricula.text = "$todayFormatted \n\nID: $id"
+        binding.txtSaludo.text = "¡Bienvenido"
+        binding.txtMatricula.text = "$nombre \n\n$todayFormatted"
 
-        // Adaptador de consejos
-        val listaConsejos = listOf(
-            Consejos("Recuerda llevar tu herramienta", R.drawable.work_tools),
-            Consejos("Usa tus protecciones", R.drawable.la_seguridad),
-            Consejos("Verifica el ticket", R.drawable.ticket_de_soporte),
-            Consejos("Contacta al cliente", R.drawable.contact_information),
-            Consejos("Registra tu entrada y salida", R.drawable.time_and_calendar),
-            Consejos("No olvides tu gafete", R.drawable.id_insignia)
-        )
-        binding.recyclerConsejos.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerConsejos.adapter = ConsejoAdapter(listaConsejos)
 
         // Conteo de tickets
         if (!token.isNullOrEmpty()) {

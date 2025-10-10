@@ -1,21 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.ServiTrack_movil" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="Theme.ServiTrack_movil" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+
+        <item name="colorOnPrimary">@color/naranja_principal</item>
+
     </style>
 
-    <style name="Theme.ServiTrack_movil" parent="Base.Theme.ServiTrack_movil" />
+
+    <style name="AppTheme.Toolbar" parent="ThemeOverlay.AppCompat.Light">
+        <item name="android:textColorPrimary">@color/naranja_principal</item>
+        <item name="colorControlNormal">@color/naranja_principal</item>
+    </style>
 
     <style name="Theme.ServiTrack_movil.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="colorControlNormal">#F4A300</item> <!-- Íconos de toolbar -->
-        <item name="android:textColorPrimary">#FFFFFF</item> <!-- Título del toolbar -->
-    </style>
+
+    <item name="windowActionBar">false</item>
+
+    <item name="windowNoTitle">true</item>
+
+        <item name="colorControlNormal">#F4A300</item></style>
+
 
     <style name="Theme.ServiTrack_movil.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
     <style name="Theme.ServiTrack_movil.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

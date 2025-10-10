@@ -19,6 +19,7 @@ import com.example.servitrack_movil.Network.LogoutRequest
 import com.example.servitrack_movil.Network.LogoutResponse
 import com.example.servitrack_movil.Network.User
 import com.example.servitrack_movil.databinding.ActivityMenuBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import retrofit2.Call
 import retrofit2.Callback
@@ -48,7 +49,6 @@ class MenuActivity : BaseActivity() {
         txtNombre.text = nombre
         txtMatricula.text = "ID: $id"
 
-        // Cargar foto en el header si hay sesión
         if (!token.isNullOrEmpty() && id != 0) {
             ApiClient.retrofit.obtenerUsuarioPorId(id, "Bearer $token")
                 .enqueue(object : Callback<User> {
@@ -71,63 +71,48 @@ class MenuActivity : BaseActivity() {
                             imgUsuarioHeader.setImageResource(R.drawable.ic_user)
                         }
                     }
-
                     override fun onFailure(call: Call<User>, t: Throwable) {
                         imgUsuarioHeader.setImageResource(R.drawable.ic_user)
                     }
                 })
         }
 
-        setSupportActionBar(binding.appBarMenu.toolbar)
+
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_menu)
+        val bottomNavView: BottomNavigationView = binding.bottomNavView
+        // Forma alternativa y más robusta de obtener el NavController
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment_content_menu) as androidx.navigation.fragment.NavHostFragment
+        val navController = navHostFragment.navController
 
-        // Definimos cuáles son destinos raíz (hamburguesa)
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home,
-                R.id.nav_usuario,
-                R.id.nav_listaTickets,
-                R.id.nav_listaUbicaciones,
-                R.id.nav_listaReportes,
-                R.id.nav_empresas,
-                R.id.nav_cerrar_sesion
+                // Asegúrate que estos IDs coincidan con los de tus menús
+                R.id.nav_home, R.id.nav_listaTickets, R.id.nav_listaReportes,
+                R.id.nav_empresas, R.id.nav_usuario
             ),
             drawerLayout
         )
 
-        // Configura el toolbar con NavigationUI
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        bottomNavView.setupWithNavController(navController)
 
-        // Listener para el menú lateral
         navView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_cerrar_sesion -> {
-                    cerrarSesion()
-                    true
-                }
-                else -> {
-                    navController.navigate(menuItem.itemId)
-                    drawerLayout.closeDrawers()
-                    true
-                }
+            if (menuItem.itemId == R.id.nav_cerrar_sesion) {
+                cerrarSesion()
+                true
+            } else {
+                NavigationUI.onNavDestinationSelected(menuItem, navController)
+                drawerLayout.closeDrawers()
+                true
             }
         }
 
-        // Mantener el color naranja en el icono (hamburguesa o flecha)
-        binding.appBarMenu.toolbar.navigationIcon?.setTint(
-            ContextCompat.getColor(this, R.color.hamburger_orange)
-        )
-
-        // Si cambia la navegación, volver a aplicar el color
-        navController.addOnDestinationChangedListener { _, _, _ ->
-            binding.appBarMenu.toolbar.navigationIcon?.setTint(
-                ContextCompat.getColor(this, R.color.hamburger_orange)
-            )
-        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

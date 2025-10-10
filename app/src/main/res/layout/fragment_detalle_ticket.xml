@@ -11,37 +11,50 @@
         android:orientation="vertical"
         android:paddingVertical="16dp">
 
-        <ImageView
-            android:id="@+id/imgTicket"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginStart="100dp"
-            android:layout_marginEnd="100dp"
-            android:src="@drawable/ticket_de_soporte"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="16dp"
-            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="16dp">
+
+            <ImageView
+                android:id="@+id/imgTicket"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="25dp"
+                android:src="@drawable/icono_ticket" />
+
+            <TextView
+                android:id="@+id/txtTituloVista"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="25dp"
+                android:text="Detalle del ticket"
+                android:textColor="#006D77"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/txtTituloVista"
-            android:layout_width="200dp"
+            android:id="@+id/txtTituloLayout"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Detalle del ticket"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="64dp"
+            android:layout_marginBottom="8dp"
+            android:text="Información del ticket"
             android:textColor="#006D77"
-            android:textStyle="bold"
-            android:textSize="24sp"
-            android:layout_marginStart="100dp"
-            android:layout_marginEnd="100dp"
-            android:layout_marginTop="32dp"
-            app:layout_constraintTop_toBottomOf="@id/imgTicket"/>
+            android:textSize="20sp"
+            android:textStyle="bold" />
         <!-- Card: ID Ticket -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="8dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="32dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp"
             app:layout_constraintTop_toBottomOf="@id/txtTituloVista">

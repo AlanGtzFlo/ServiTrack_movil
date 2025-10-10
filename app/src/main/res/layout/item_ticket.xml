@@ -12,11 +12,12 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <!-- Icono de estado -->
         <ImageView
-            android:id="@+id/imgEstado"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_ticket"
+            android:id="@+id/imgReporte"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/icono_ticket_teal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,35 +25,26 @@
             android:id="@+id/txtTituloTicket"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_marginStart="16dp"
             android:text="Título del ticket"
-            android:textColor="#003F4E"
+            android:textColor="#006D77"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imgEstado"
+            app:layout_constraintStart_toEndOf="@id/imgReporte"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/txtEstadoTicket"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Abierto"
-            android:textColor="#666"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="@id/txtTituloTicket"
-            app:layout_constraintTop_toBottomOf="@id/txtTituloTicket" />
 
         <TextView
             android:id="@+id/txtFechaTicket"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="01 jul 2025"
-            android:textColor="#999"
+            android:layout_marginStart="16dp"
+            android:text="Fecha de vigencia: 01 jul 2025"
+            android:textColor="#006D77"
             android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imgReporte" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

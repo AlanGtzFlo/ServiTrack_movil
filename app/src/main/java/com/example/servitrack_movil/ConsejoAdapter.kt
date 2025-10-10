@@ -13,7 +13,7 @@ class ConsejoAdapter(private val lista: List<Consejos>) :
     RecyclerView.Adapter<ConsejoAdapter.ConsejoViewHolder>() {
 
     class ConsejoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val imagen: ImageView = itemView.findViewById(R.id.imgConsejo)
+        val imagen: ImageView = itemView.findViewById(R.id.imgIconoTicket)
         val mensaje: TextView = itemView.findViewById(R.id.txtMensaje)
     }
 

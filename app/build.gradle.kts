@@ -4,6 +4,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-parcelize")
     id("kotlin-kapt")
+    alias(libs.plugins.google.gms.google.services)
 
 }
 
@@ -44,6 +45,8 @@ android {
 
 dependencies {
 
+    implementation (platform(libs.firebase.bom))
+    implementation (libs.firebase.messaging.ktx)
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.squareup.okhttp3:okhttp:4.9.3")

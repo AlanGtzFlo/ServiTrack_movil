@@ -1,21 +1,45 @@
 package com.example.servitrack_movil
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import com.example.servitrack_movil.Network.ApiClient
 import com.example.servitrack_movil.Network.LoginRequest
 import com.example.servitrack_movil.Network.LoginResponse
+import com.google.firebase.messaging.FirebaseMessaging
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
+
+    // 1. El "launcher" se declara como una propiedad de la clase, no dentro de onCreate.
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Log.d("FCM", "Permiso concedido. Obteniendo token...")
+            getAndSendFcmToken()
+        } else {
+            Log.w("FCM", "Permiso de notificación denegado.")
+            // Aún si se deniega el permiso, el usuario debe poder continuar.
+            navigateToMenu()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         val edtUsuario = findViewById<EditText>(R.id.edtIdUsuario)
@@ -24,11 +48,11 @@ class MainActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
         val token = prefs.getString("access_token", null)
 
+        // Si el usuario ya inició sesión, ve directo al menú.
         if (!token.isNullOrEmpty()) {
-            startActivity(Intent(this, MenuActivity::class.java))
-            finish()
+            navigateToMenu()
+            return // Importante para no continuar ejecutando el código de onCreate
         }
-
 
         btnIngresar.setOnClickListener {
             val usuario = edtUsuario.text.toString().trim()
@@ -39,74 +63,94 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // *** INICIO DE SESIÓN LOCAL ***
+            // *** INICIO DE SESIÓN LOCAL REINTEGRADO ***
             if (usuario == "user" && password == "1234") {
                 Toast.makeText(this, "Inicio de sesión local exitoso", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this@MainActivity, MenuActivity::class.java)
-                startActivity(intent)
-                finish()
-                return@setOnClickListener
+                // NOTA: Si quieres que este usuario local también se registre para notificaciones,
+                // es importante llamar a esta función aquí también.
+                initiateNotificationFlow()
+                return@setOnClickListener // Salimos para no hacer la llamada a la API
             }
 
             val loginRequest = LoginRequest(correo = usuario, password = password)
-
             val call = ApiClient.retrofit.login(loginRequest)
-            call.enqueue(object : retrofit2.Callback<LoginResponse> {
-                override fun onResponse(
-                    call: retrofit2.Call<LoginResponse>,
-                    response: retrofit2.Response<LoginResponse>
-                ) {
-                    if (response.isSuccessful) { // Check only for HTTP success first
-                        val loginData = response.body() // loginData is LoginResponse?
 
-                        if (loginData != null) { // Explicitly check if the body is not null
-                            val accessToken = loginData.access   // Now, loginData is smart-cast to non-nullable
-                            val refreshToken = loginData.refresh // Same here
+            call.enqueue(object : Callback<LoginResponse> {
+                override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        val loginData = response.body()!!
 
-                            // Guarda los tokens, por ejemplo, en SharedPreferences
-                            // val sharedPrefs = getSharedPreferences("app_prefs", MODE_PRIVATE)
-                            // sharedPrefs.edit().putString("access_token", accessToken).apply()
-                            // sharedPrefs.edit().putString("refresh_token", refreshToken).apply()
-
-                            val sharedPrefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
-                            with(sharedPrefs.edit()) {
-                                putInt("id", loginData.user.id)
-                                putString("nombre", loginData.user.nombre)
-                                putString("correo", loginData.user.correo)
-                                putString("rol", loginData.user.rol)
-                                putString("fecha", loginData.user.fecha_registro)
-                                putString("imagen", loginData.user.foto)
-                                putString("access_token", accessToken)
-                                putString("refresh_token", refreshToken)
-                                apply()
-                            }
-
-                            Toast.makeText(this@MainActivity, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
-
-                            val intent = Intent(this@MainActivity, MenuActivity::class.java)
-                            startActivity(intent)
-                            finish()
-
-                        } else {
-                            // This case means HTTP 200 OK, but the response body was null or couldn't be parsed
-                            // (e.g., empty response, or parsing failed despite valid JSON)
-                            android.util.Log.e("Login", "Respuesta exitosa, pero el cuerpo es nulo.")
-                            Toast.makeText(this@MainActivity, "Error en la respuesta del servidor (body nulo)", Toast.LENGTH_SHORT).show()
+                        // Guardar datos del usuario y tokens en SharedPreferences
+                        val sharedPrefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+                        with(sharedPrefs.edit()) {
+                            putInt("id", loginData.user.id)
+                            putString("nombre", loginData.user.nombre)
+                            putString("correo", loginData.user.correo)
+                            putString("rol", loginData.user.rol)
+                            putString("access_token", loginData.access)
+                            putString("refresh_token", loginData.refresh)
+                            apply()
                         }
+
+                        Toast.makeText(this@MainActivity, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
+
+                        // 2. Este es el momento correcto para iniciar el flujo de notificaciones.
+                        initiateNotificationFlow()
+
                     } else {
-                        // This block executes if the server returns a non-200 HTTP code (e.g., 401, 403, 500)
-                        val errorBody = response.errorBody()?.string()
-                        val errorCode = response.code()
-                        android.util.Log.e("Login", "Error code: $errorCode, Error body: $errorBody")
-                        Toast.makeText(this@MainActivity, "Credenciales incorrectas o error en el servidor", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
                     }
                 }
 
-                override fun onFailure(call: retrofit2.Call<LoginResponse>, t: Throwable) {
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                     Toast.makeText(this@MainActivity, "Error de conexión: ${t.message}", Toast.LENGTH_LONG).show()
-                    android.util.Log.e("Login", "Fallo de red: ${t.message}", t)
                 }
             })
         }
+    }
+
+    // 3. Todas estas funciones son ahora métodos de MainActivity.
+    private fun initiateNotificationFlow() {
+        // En Android 13 (TIRAMISU) o superior, se necesita permiso explícito.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                // El permiso ya está concedido.
+                getAndSendFcmToken()
+            } else {
+                // Solicita el permiso.
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        } else {
+            // En versiones anteriores, no se requiere permiso en tiempo de ejecución.
+            getAndSendFcmToken()
+        }
+    }
+
+    private fun getAndSendFcmToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val fcmToken = task.result
+                Log.d("FCM", "Token de FCM obtenido: $fcmToken")
+                sendTokenToServer(fcmToken)
+            } else {
+                Log.w("FCM", "No se pudo obtener el token de FCM.", task.exception)
+                // Si falla la obtención del token, igual navega al menú para no bloquear al usuario.
+                navigateToMenu()
+            }
+        }
+    }
+
+    private fun sendTokenToServer(token: String) {
+        // AQUÍ DEBES IMPLEMENTAR LA LLAMADA DE RED CON RETROFIT PARA ENVIAR EL TOKEN
+        Log.d("FCM", "Enviando token ($token) al servidor... (Lógica pendiente)")
+
+        // Una vez que la lógica de envío termine (incluso si falla), navega al menú.
+        navigateToMenu()
+    }
+
+    private fun navigateToMenu() {
+        val intent = Intent(this, MenuActivity::class.java)
+        startActivity(intent)
+        finish() // Cierra MainActivity para que el usuario no pueda volver atrás.
     }
 }

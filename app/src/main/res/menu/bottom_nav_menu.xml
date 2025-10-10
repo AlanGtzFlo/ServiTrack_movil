@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/icono_home"
+        android:title="Inicio" />
+
+    <item
+        android:id="@+id/nav_listaTickets"
+        android:icon="@drawable/icono_ticket"
+        android:title="Tickets" />
+
+    <item
+        android:id="@+id/nav_listaReportes"
+        android:icon="@drawable/icono_reporte"
+        android:title="Reportes" />
+
+    <item
+        android:id="@+id/nav_empresas"
+        android:icon="@drawable/icono_edificio"
+        android:title="Empresas" />
+
+    <item
+        android:id="@+id/nav_usuario"
+        android:icon="@drawable/icono_perfil"
+        android:title="Perfil" />
+
+</menu>

@@ -5,31 +5,6 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/home"
-            android:title="Inicio"
-            tools:layout="@layout/fragment_home"/>
-        <item
-            android:id="@+id/nav_usuario"
-            android:icon="@drawable/usuario"
-            android:title="Usuario" />
-        <item
-            android:id="@+id/nav_listaTickets"
-            android:icon="@drawable/lista"
-            android:title="Lista de tickets" />
-        <item
-            android:id="@+id/nav_listaUbicaciones"
-            android:icon="@drawable/parking"
-            android:title="Ubicaciones" />
-        <item
-            android:id="@+id/nav_listaReportes"
-            android:icon="@drawable/listacheck"
-            android:title="Lista de reportes" />
-        <item
-            android:id="@+id/nav_empresas"
-            android:icon="@drawable/edificio"
-            android:title="Empresas" />
-        <item
             android:id="@+id/nav_cerrar_sesion"
             android:icon="@drawable/logout"
             android:title="Cerrar sesión" />

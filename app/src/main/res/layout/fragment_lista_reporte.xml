@@ -29,7 +29,7 @@
         android:layout_height="80dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="18dp"
-        android:src="@mipmap/logo"
+        android:src="@drawable/icono_reporte"
         app:layout_constraintBottom_toTopOf="@+id/btnCrear"
         app:layout_constraintEnd_toStartOf="@+id/txtTituloReportes"
         app:layout_constraintStart_toStartOf="parent"

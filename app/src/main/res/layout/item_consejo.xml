@@ -1,37 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="250dp"
-    android:layout_height="300dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:background="#003F4E"
     app:cardCornerRadius="16dp"
     app:cardElevation="6dp">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:padding="12dp"
-        android:background="@drawable/bg_card"
         android:layout_width="match_parent"
-        android:layout_height="300dp">
-
-        <ImageView
-            android:id="@+id/imgConsejo"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_foreground" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FAFAFA" android:padding="16dp">
 
         <TextView
-            android:id="@+id/txtMensaje"
+            android:id="@+id/txtTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Próximo ticket por resolver"
+            android:textSize="16sp"
+            android:textColor="#003F4E"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="12dp">
+
+            <ImageView
+                android:id="@+id/imgIconoTicket"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/icono_ticket_teal"
+                app:tint="#00796B" />
+
+            <TextView
+            android:id="@+id/txtUbicacion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:text="Hospital Arboledas"
+            android:textSize="24sp"
+            android:textColor="#003F4E"
+            android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtProblema"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Problema: Falla con su instalación de red"
+            android:textSize="14sp"
+            android:textColor="#003F4E" />
+
+        <TextView
+            android:id="@+id/txtFecha"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:background="@drawable/rounded_textview"
-            android:text="Consejo aquí"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            android:textColor="#003F4E"
-            android:textStyle="bold" />
+            android:gravity="end"
+            android:text="Fecha de servicio: 2025-10-01"
+            android:textSize="14sp"
+            android:textColor="#666666" />
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

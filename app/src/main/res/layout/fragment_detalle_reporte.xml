@@ -11,31 +11,49 @@
         android:orientation="vertical"
         android:paddingVertical="16dp">
 
-        <ImageView
-            android:id="@+id/imgTicket"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:src="@drawable/seo_report"
-            android:contentDescription="Logo"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="16dp">
+
+            <ImageView
+                android:id="@+id/imgReporte"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="25dp"
+                android:src="@drawable/icono_reporte" />
+
+            <TextView
+                android:id="@+id/txtTituloVista"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="25dp"
+                android:text="Detalle del reporte"
+                android:textColor="#006D77"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/txtTituloVista"
+            android:id="@+id/txtTituloLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Detalle del reporte"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="64dp"
+            android:layout_marginBottom="8dp"
+            android:text="Información del reporte"
             android:textColor="#006D77"
-            android:textStyle="bold"
-            android:textSize="24sp"
-            android:layout_gravity="center"
-            android:layout_marginTop="32dp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <!-- ID -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="32dp"
             android:layout_marginBottom="8dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="2dp">

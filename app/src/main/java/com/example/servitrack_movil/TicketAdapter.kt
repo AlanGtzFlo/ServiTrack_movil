@@ -15,12 +15,12 @@ class TicketAdapter(
 
     inner class TicketViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val txtTitulo: TextView = itemView.findViewById(R.id.txtTituloTicket)
-        private val txtEstado: TextView = itemView.findViewById(R.id.txtEstadoTicket)
+        // private val txtEstado: TextView = itemView.findViewById(R.id.txtEstadoTicket)
         private val txtFecha: TextView = itemView.findViewById(R.id.txtFechaTicket)
 
         fun bind(ticket: Ticket) {
             txtTitulo.text = ticket.titulo
-            txtEstado.text = ticket.estado
+            //txtEstado.text = ticket.estado
             txtFecha.text = ticket.fecha
 
             itemView.setOnClickListener {
