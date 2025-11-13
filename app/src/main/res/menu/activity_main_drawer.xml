@@ -8,5 +8,10 @@
             android:id="@+id/nav_cerrar_sesion"
             android:icon="@drawable/logout"
             android:title="Cerrar sesión" />
+
+        <item
+            android:id="@+id/nav_listaUbicaciones"
+            android:icon="@drawable/icono_localizacion"
+            android:title="Ubicaciones" />
     </group>
 </menu>

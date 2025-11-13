@@ -1,7 +1,7 @@
 package com.example.servitrack_movil.Network
 
 data class LoginRequest(
-    val correo: String,
+    val email: String,
     val password: String
 )
 
@@ -21,14 +21,18 @@ data class LogoutResponse(
 
 data class User(
     val id: Int,
-    val nombre: String,
-    val correo: String,
-    val rol: String,
-    val activo: Boolean,
-    val fecha_registro: String,
-    val foto: String,
-    val telefono: String,
-    val direccion: String
+    val username: String,
+    val email: String,
+    val first_name: String,
+    val last_name: String,
+    val phone: String?,
+    val address: String?,
+    val user_type: String,
+    val age: Int,
+    val rfc: String?,
+    val status: String,
+    val company: Int,
+    val photo: String?
 )
 
 data class UserInfo(

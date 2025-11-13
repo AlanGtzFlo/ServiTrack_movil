@@ -20,7 +20,6 @@ class TicketAdapter(
 
         fun bind(ticket: Ticket) {
             txtTitulo.text = ticket.titulo
-            //txtEstado.text = ticket.estado
             txtFecha.text = ticket.fecha
 
             itemView.setOnClickListener {

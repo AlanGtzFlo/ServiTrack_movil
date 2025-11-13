@@ -112,16 +112,6 @@
                     android:textColor="#333"
                     android:textSize="16sp" />
 
-                <TextView
-                    android:id="@+id/txtFechaIngresoUsuario"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/borde_textview"
-                    android:text="Ingreso:\n2023-01-01"
-                    android:textColor="#333"
-                    android:textSize="16sp" />
-
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

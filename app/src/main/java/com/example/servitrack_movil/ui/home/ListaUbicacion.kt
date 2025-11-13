@@ -40,18 +40,11 @@ class ListaUbicacion : Fragment() {
     fun UbicacionResponse.toUbicacion(): Ubicacion {
         return Ubicacion(
             id = this.id,
-            nombre = this.nombre ?: "Sin nombre",
-            direccion = this.direccion ?: "Sin dirección",
-            cliente_id = this.cliente?.id ?: 0,
-            empresa_id = this.empresa?.id ?: 0,
-            contacto = this.contacto ?: "No especificado",
-            estatus = this.estatus ?: false,
-            fecha_creacion = this.fecha_creacion ?: "Fecha no disponible"
+            name = this.name ?: "Sin nombre",
+            address = this.address ?: "Sin dirección",
+            company = this.company?: 0
         )
     }
-
-
-
 
     private fun cargarUbicaciones() {
         val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)

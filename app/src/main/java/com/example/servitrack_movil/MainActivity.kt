@@ -23,6 +23,10 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        private const val LOGIN_TAG = "MiAppLogin"
+    }
+
     // 1. El "launcher" se declara como una propiedad de la clase, no dentro de onCreate.
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -72,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener // Salimos para no hacer la llamada a la API
             }
 
-            val loginRequest = LoginRequest(correo = usuario, password = password)
+            val loginRequest = LoginRequest(email = usuario, password = password)
             val call = ApiClient.retrofit.login(loginRequest)
 
             call.enqueue(object : Callback<LoginResponse> {
@@ -84,13 +88,20 @@ class MainActivity : AppCompatActivity() {
                         val sharedPrefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
                         with(sharedPrefs.edit()) {
                             putInt("id", loginData.user.id)
-                            putString("nombre", loginData.user.nombre)
-                            putString("correo", loginData.user.correo)
-                            putString("rol", loginData.user.rol)
+                            putString("nombre", loginData.user.first_name)
+                            putString("correo", loginData.user.email)
+                            putString("rol", loginData.user.user_type)
                             putString("access_token", loginData.access)
                             putString("refresh_token", loginData.refresh)
                             apply()
                         }
+
+                        // --- LOGS DE VERIFICACIÓN AÑADIDOS ---
+                        // Revisa el Logcat (filtrando por "MiAppLogin") para ver estos valores.
+                        Log.d(LOGIN_TAG, "Datos guardados en SharedPreferences:")
+                        Log.d(LOGIN_TAG, "ID: ${loginData.user.id}")
+                        Log.d(LOGIN_TAG, "Access Token: ${loginData.access}")
+                        // ------------------------------------
 
                         Toast.makeText(this@MainActivity, "Inicio de sesión exitoso", Toast.LENGTH_SHORT).show()
 
@@ -98,11 +109,17 @@ class MainActivity : AppCompatActivity() {
                         initiateNotificationFlow()
 
                     } else {
+
+                        val errorBody = try { response.errorBody()?.string() } catch (e: Exception) { "No se pudo leer el error" }
+                        Log.e(LOGIN_TAG, "Login FALLIDO. Código: ${response.code()}")
+                        Log.e(LOGIN_TAG, "Cuerpo del error del servidor: $errorBody")
+
                         Toast.makeText(this@MainActivity, "Credenciales incorrectas", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    Log.e(LOGIN_TAG, "Error de conexión: ${t.message}", t)
                     Toast.makeText(this@MainActivity, "Error de conexión: ${t.message}", Toast.LENGTH_LONG).show()
                 }
             })

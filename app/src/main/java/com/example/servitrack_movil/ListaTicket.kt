@@ -97,9 +97,9 @@ class ListaTicketFragment : Fragment() {
                     listaTicketsOriginal.addAll(responseTickets.map {
                         Ticket(
                             id = it.id.toString(),
-                            titulo = it.titulo,
-                            estado = it.estado,
-                            fecha = formatearFecha(it.fecha_limite)
+                            titulo = it.title,
+                            estado = it.status,
+                            fecha = formatearFecha(it.end_time)
                         )
                     })
                     // Inicialmente mostrar todos los tickets

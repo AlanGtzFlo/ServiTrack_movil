@@ -17,7 +17,7 @@ class UbicacionAdapter(
 
     inner class UbicacionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(ubicacion: Ubicacion) {
-            itemView.findViewById<TextView>(R.id.tVNombreUbicacion).text = ubicacion.nombre
+            itemView.findViewById<TextView>(R.id.tVNombreUbicacion).text = ubicacion.name
             itemView.setOnClickListener {
                 onItemClick(ubicacion)
             }

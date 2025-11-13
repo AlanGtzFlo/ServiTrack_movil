@@ -133,7 +133,7 @@ class GenerarReporteFragment : Fragment() {
             override fun onResponse(call: Call<List<TicketResponse>>, response: Response<List<TicketResponse>>) {
                 if (response.isSuccessful) {
                     tickets = response.body() ?: emptyList()
-                    val nombres = tickets.map { it.titulo ?: "Ticket ${it.id}" }
+                    val nombres = tickets.map { it.title ?: "Ticket ${it.id}" }
                     val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, nombres)
                     spinner.adapter = adapter
                 } else {
@@ -155,7 +155,7 @@ class GenerarReporteFragment : Fragment() {
             override fun onResponse(call: Call<List<UbicacionResponse>>, response: Response<List<UbicacionResponse>>) {
                 if (response.isSuccessful) {
                     ubicaciones = response.body() ?: emptyList()
-                    val nombres = ubicaciones.map { it.nombre ?: "Ubicación ${it.id}" }
+                    val nombres = ubicaciones.map { it.name ?: "Ubicación ${it.id}" }
                     val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, nombres)
                     spinner.adapter = adapter
                 } else {
@@ -177,7 +177,7 @@ class GenerarReporteFragment : Fragment() {
             override fun onResponse(call: Call<List<EmpresaResponse>>, response: Response<List<EmpresaResponse>>) {
                 if (response.isSuccessful) {
                     empresas = response.body() ?: emptyList()
-                    val nombres = empresas.map { it.nombre ?: "Empresa ${it.id}" }
+                    val nombres = empresas.map { it.name ?: "Empresa ${it.id}" }
                     val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, nombres)
                     spinner.adapter = adapter
                 } else {

@@ -148,7 +148,7 @@ class DetalleReporteFragment : Fragment() {
                     if (response.isSuccessful) {
                         val ubicacion = response.body()?.find { it.id == id }
                         binding.txtUbicacion.text =
-                            "Ubicación: ${ubicacion?.nombre ?: "Desconocida"}"
+                            "Ubicación: ${ubicacion?.name ?: "Desconocida"}"
                     } else {
                         binding.txtUbicacion.text = "Ubicación: Desconocida"
                     }

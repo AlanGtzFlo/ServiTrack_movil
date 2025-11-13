@@ -4,27 +4,35 @@ import java.util.Date
 
 data class TicketResponse(
     val id: Int,
-    val titulo: String,
-    val descripcion: String,
-    val prioridad: String,
-    val estado: String,
-    val fecha_limite: Date,
-    val ubicacion: String,
-    val usuario_creador: String,
-    val tecnico_asignado: String
+    val title: String,
+    val description: String,
+    val category: String,
+    val priority: String,
+    val equipment: String,
+    val start_time: Date,   // puede ser null
+    val end_time: Date,     // puede ser null
+    val duration: String,
+    val report: String,
+    val status: String,
+    val company: Int,
+    val user: Int,
+    val location: String
 )
 
 data class TicketRequest(
-    val id: Int,
-    val titulo: String,
-    val descripcion: String,
-    val prioridad: String,
-    val estado: String,
-    val fecha_limite: Date,
-    val ubicacion: String,
-    val usuario_creador: String,
-    val tecnico_asignado: String
+    val title: String,
+    val description: String,
+    val category: String,
+    val priority: String,
+    val equipment: String,
+    val duration: String,
+    val report: String,
+    val status: String,
+    val company: Int,
+    val user: Int,
+    val location: String?
 )
+
 
 data class ConteoTicketsResponse(
     val pendiente: Int,

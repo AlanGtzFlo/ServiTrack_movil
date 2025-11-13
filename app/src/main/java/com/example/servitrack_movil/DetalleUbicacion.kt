@@ -36,21 +36,13 @@ class DetalleUbicacionFragment : Fragment() {
 
         // Mostrar datos básicos
         view.findViewById<TextView>(R.id.txtUbicacionId).text = "ID:\n${ubicacion.id}"
-        view.findViewById<TextView>(R.id.txtNombreDetalle).text = "Nombre:\n${ubicacion.nombre}"
-        view.findViewById<TextView>(R.id.txtDireccionDetalle).text = "Dirección:\n${ubicacion.direccion}"
-        view.findViewById<TextView>(R.id.txtContacto).text = "Contacto:\n${ubicacion.contacto}"
+        view.findViewById<TextView>(R.id.txtNombreDetalle).text = "Nombre:\n${ubicacion.name}"
+        view.findViewById<TextView>(R.id.txtDireccionDetalle).text = "Dirección:\n${ubicacion.address}"
+        view.findViewById<TextView>(R.id.txtContacto).text = "Contacto:\n${ubicacion.company}"
 
         // Los TextView donde mostraremos los nombres recuperados
         txtClienteNombre = view.findViewById(R.id.txtCliente_id)
         txtEmpresaNombre = view.findViewById(R.id.txtEmpresa)
-
-        // Cargar nombres de Cliente y Empresa por ID
-        ubicacion.cliente_id?.let { obtenerNombreCliente(it) } ?: run {
-            txtClienteNombre.text = "Cliente: Desconocido"
-        }
-        ubicacion.empresa_id?.let { obtenerNombreEmpresa(it) } ?: run {
-            txtEmpresaNombre.text = "Empresa: Desconocida"
-        }
 
         return view
     }
@@ -88,7 +80,7 @@ class DetalleUbicacionFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val empresa = response.body()?.find { it.id == empresaId }
-                    txtEmpresaNombre.text = "Empresa:\n${empresa?.nombre ?: "Desconocida"}"
+                    txtEmpresaNombre.text = "Empresa:\n${empresa?.name ?: "Desconocida"}"
                 } else {
                     txtEmpresaNombre.text = "Empresa:\nDesconocida"
                 }

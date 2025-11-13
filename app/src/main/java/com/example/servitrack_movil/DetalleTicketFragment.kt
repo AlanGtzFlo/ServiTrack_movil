@@ -78,16 +78,16 @@ class DetalleTicketFragment : Fragment() {
 
     private fun mostrarDatos(ticket: TicketResponse) {
         txtTicketId.text = "ID: ${ticket.id}"
-        txtTitulo.text = "Título: ${ticket.titulo}"
-        txtDescripcion.text = "Descripción: ${ticket.descripcion}"
-        txtPrioridad.text = "Prioridad: ${ticket.prioridad}"
-        txtEstado.text = "Estado: ${ticket.estado}"
-        txtFecha.text = "Fecha límite: ${formatearFecha(ticket.fecha_limite)}"
-        txtUbicacion.text = "Ubicación: ${ticket.ubicacion}"
-        txtCreador.text = "Id del creador: ${ticket.usuario_creador}"
-        txtTecnico.text = "Id del técnico: ${ticket.tecnico_asignado}"
+        txtTitulo.text = "Título: ${ticket.title}"
+        txtDescripcion.text = "Descripción: ${ticket.description}"
+        txtPrioridad.text = "Prioridad: ${ticket.priority}"
+        txtEstado.text = "Estado: ${ticket.status}"
+        txtFecha.text = "Fecha límite: ${formatearFecha(ticket.end_time)}"
+        txtUbicacion.text = "Ubicación: ${ticket.location}"
+        txtCreador.text = "Id del creador: ${ticket.user}"
+        txtTecnico.text = "Id del técnico: ${ticket.user}"
 
-        obtenerNombreUbicacion(ticket.ubicacion.toInt())
+        obtenerNombreUbicacion(ticket.location.toInt())
     }
 
     private fun obtenerNombreUbicacion(id: Int) {
@@ -102,7 +102,7 @@ class DetalleTicketFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val ubicacion = response.body()?.find { it.id == id }
-                    txtUbicacion.text = "Ubicación: ${ubicacion?.nombre ?: "Desconocida"}"
+                    txtUbicacion.text = "Ubicación: ${ubicacion?.name ?: "Desconocida"}"
                 } else {
                     txtUbicacion.text = "Ubicación: Desconocida"
                 }

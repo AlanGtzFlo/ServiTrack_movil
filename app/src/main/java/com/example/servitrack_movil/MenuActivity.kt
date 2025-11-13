@@ -55,9 +55,9 @@ class MenuActivity : BaseActivity() {
                     override fun onResponse(call: Call<User>, response: Response<User>) {
                         if (response.isSuccessful) {
                             val user = response.body()
-                            if (!user?.foto.isNullOrEmpty()) {
+                            if (!user?.photo.isNullOrEmpty()) {
                                 Glide.with(this@MenuActivity)
-                                    .load(user.foto)
+                                    .load(user.photo)
                                     .placeholder(R.drawable.ic_user)
                                     .error(R.drawable.ic_user)
                                     .circleCrop()
@@ -93,7 +93,7 @@ class MenuActivity : BaseActivity() {
             setOf(
                 // Asegúrate que estos IDs coincidan con los de tus menús
                 R.id.nav_home, R.id.nav_listaTickets, R.id.nav_listaReportes,
-                R.id.nav_empresas, R.id.nav_usuario
+                R.id.nav_empresas, R.id.nav_usuario, R.id.nav_listaUbicaciones
             ),
             drawerLayout
         )

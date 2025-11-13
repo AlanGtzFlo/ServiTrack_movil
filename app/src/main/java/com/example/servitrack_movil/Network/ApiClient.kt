@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object ApiClient {
-    private const val BASE_URL = "https://fixflow-backend.onrender.com/"
+    private const val BASE_URL = "https://fixflow-endpoints.onrender.com/"
 
     private val okHttpClient = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)

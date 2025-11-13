@@ -16,79 +16,73 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    //Login
+    // MARK: - Autenticación
+    //================================================================================
+
     @POST("api/login/")
     fun login(@Body request: LoginRequest): Call<LoginResponse>
 
-    //Logout
     @POST("api/logout/")
     fun logout(
         @Header("Authorization") authHeader: String,
         @Body logoutRequest: LogoutRequest
     ): Call<LogoutResponse>
 
+    // MARK: - Usuarios
+    //================================================================================
+
     @Multipart
-    @PATCH("api/usuarios/{id}/cambiar_foto/")
+    @PATCH("api/users/{id}/cambiar_foto/")
     fun cambiarFoto(
         @Header("Authorization") token: String,
         @Path("id") id: Int,
-        @Part foto: MultipartBody.Part
+        @Part photo: MultipartBody.Part
     ): Call<Void>
 
-
     @Multipart
-    @POST("api/usuarios/")
+    @POST("api/users/")
     fun subirImagen(@Part foto: MultipartBody.Part): Call<User>
 
-    //Todos los tickets
-    @GET("api/tickets/")
-    fun getTickets(@Header("Authorization") token: String): Call<List<TicketResponse>>
-
-    @GET("api/usuarios/{id}/")
+    @GET("api/users/{id}/")
     fun obtenerUsuarioPorId(
         @Path("id") id: Int,
         @Header("Authorization") token: String
     ): Call<User>
 
-    @PATCH("api/usuarios/{id}/cambiar_password/")
+    @PATCH("api/users/{id}/cambiar_password/")
     fun cambiarPassword(
         @Path("id") id: Int,
         @Header("Authorization") token: String,
         @Body nuevaPassword: NuevaPasswordRequest
     ): Call<Void>
 
-    //Ticket por ID
+    // MARK: - Tickets
+    //================================================================================
+
+    @GET("api/tickets/")
+    fun getTickets(@Header("Authorization") token: String): Call<List<TicketResponse>>
+
     @GET("api/tickets/{id}")
     fun getTicketById(
         @Path("id") id: Int,
         @Header("Authorization") token: String
     ): Call<TicketResponse>
 
-    //Ticket por usuario
     @GET("api/tickets/tickets_usuario/")
     fun getTicketsByUser(
         @Header("Authorization") token: String
     ): Call<List<TicketResponse>>
 
-    //Conteo de tickets
     @GET("/api/tickets/contar_estados_por_usuario")
     fun getTicketCountByTechnician(
         @Header("Authorization") token: String
     ): Call<ConteoTicketsResponse>
 
-    //Generar PDF
-    @GET("api/reportes/{id}/exportar_reporte/")
-    fun exportarPdf(
-        @Path("id") id: Int,
-        @Header("Authorization") token: String
-    ): Call<ResponseBody>
-
-    //Obtener Empresas
-    @GET("api/empresas/")
-    fun getEmpresas(@Header("Authorization") token: String): Call<List<EmpresaResponse>>
+    // MARK: - Reportes
+    //================================================================================
 
     @Multipart
-    @POST("api/reportes/")
+    @POST("api/reports/")
     fun createReporte(
         @Header("Authorization") token: String,
         @Part("ticket") ticket: RequestBody,
@@ -102,6 +96,24 @@ interface ApiService {
         @Part("informacion_reporte") informacionReporte: RequestBody
     ): Call<ReporteResponse>
 
+    @GET("api/reports/")
+    fun getReportes(@Header("Authorization") token: String): Call<List<ReporteResponse>>
+
+    @GET("api/reports/{id}")
+    fun getReporteById(@Path("id") id: Int): Call<ReporteResponse>
+
+    @GET("api/reports/{id}/exportar_reporte/")
+    fun exportarPdf(
+        @Path("id") id: Int,
+        @Header("Authorization") token: String
+    ): Call<ResponseBody>
+
+    @GET("api/reports/conteo_por_tecnico/?tecnico={id}")
+    fun getReporteCountByTechnician(@Path("id") id: Int): Call<Int>
+
+    // MARK: - Mensajes de Reporte
+    //================================================================================
+
     @Multipart
     @POST("api/mensajes_reporte/")
     fun createMensaje(
@@ -111,13 +123,11 @@ interface ApiService {
         @Part imagen: MultipartBody.Part? = null
     ): Call<Void>
 
-
     @GET("api/mensajes_reporte/mensajes_por_reporte_id/")
     fun getMensajesPorReporteId(
         @Query("reporte") reporteId: Int,
         @Header("Authorization") token: String
     ): Call<List<MensajeResponse>>
-
 
     @GET("api/mensajes_reporte/{id}/")
     fun getMensajePorId(
@@ -125,19 +135,13 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<MensajeResponse>
 
+    // MARK: - Entidades (Empresas, Ubicaciones, Clientes)
+    //================================================================================
 
-    @GET("api/reportes/{id}")
-    fun getReporteById(@Path("id") id: Int): Call<ReporteResponse>
+    @GET("api/companies/")
+    fun getEmpresas(@Header("Authorization") token: String): Call<List<EmpresaResponse>>
 
-    @GET(/* value = */ "api/reportes/")
-    fun getReportes(@Header("Authorization") token: String): Call<List<ReporteResponse>>
-
-    //Conteo Reportes
-    @GET("api/reportes/conteo_por_tecnico/?tecnico={id}")
-    fun getReporteCountByTechnician(@Path("id") id: Int): Call<Int>
-
-    // Ubicaciones
-    @GET("api/ubicaciones/")
+    @GET("api/locations/")
     fun getUbicaciones(@Header("Authorization") token: String): Call<List<UbicacionResponse>>
 
     @GET("api/clientes/")
@@ -145,7 +149,11 @@ interface ApiService {
 
     @GET("api/clientes/{id}/")
     fun getCliente(@Path("id") id: Int,@Header("Authorization") token: String): Call<Cliente>
+
+    @POST("user/registrar-token")
+    fun registrarTokenFCM(
+        @Query("userId") userId: Int,
+        @Query("token") token: String
+    ): Call<Void>
+
 }
-
-
-

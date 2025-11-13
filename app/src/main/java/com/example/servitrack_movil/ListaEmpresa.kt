@@ -71,11 +71,11 @@ class ListaEmpresaFragment : Fragment() {
                         listaEmpresasOriginal = empresas.map {
                             Empresa(
                                 id = it.id.toString(),
-                                nombre = it.nombre,
-                                estatus = it.estatus,
-                                tipo_poliza = it.tipo_poliza,
-                                fecha_inicio_poliza = it.fecha_inicio_poliza.toString().substring(0, 10),
-                                fecha_fin_poliza = it.fecha_fin_poliza.toString().substring(0, 10)
+                                nombre = it.name,
+                                estatus = it.status == "active",
+                                tipo_poliza = it.plan_type,
+                                fecha_inicio_poliza = it.created_at.toString().substring(0, 10),
+                                fecha_fin_poliza = it.created_at.toString().substring(0, 10)
                             )
                         }
                         mostrarEmpresas(listaEmpresasOriginal)
