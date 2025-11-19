@@ -95,7 +95,7 @@ class GenerarMensaje : Fragment() {
                 if (response.isSuccessful && response.body() != null) {
                     listaReportes = response.body()!!
 
-                    val nombres = listaReportes.map { it.descripcion }
+                    val nombres = listaReportes.map { it.ticket }
 
                     val adapter = ArrayAdapter(
                         requireContext(),
@@ -119,7 +119,7 @@ class GenerarMensaje : Fragment() {
                                 id: Long
                             ) {
                                 reporteSeleccionadoId = listaReportes[position].id
-                                reporteNombre = listaReportes[position].descripcion
+                                reporteNombre = listaReportes[position].ticket.toString()
                             }
 
                             override fun onNothingSelected(parent: AdapterView<*>) {

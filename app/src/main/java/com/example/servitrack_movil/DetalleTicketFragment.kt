@@ -26,7 +26,6 @@ class DetalleTicketFragment : Fragment() {
     private lateinit var txtEstado: TextView
     private lateinit var txtFecha: TextView
     private lateinit var txtUbicacion: TextView
-    private lateinit var txtCreador: TextView
     private lateinit var txtTecnico: TextView
 
     override fun onCreateView(
@@ -43,7 +42,6 @@ class DetalleTicketFragment : Fragment() {
         txtEstado = view.findViewById(R.id.txtEstado)
         txtFecha = view.findViewById(R.id.txtFecha)
         txtUbicacion = view.findViewById(R.id.txtUbicacion)
-        txtCreador = view.findViewById(R.id.txtCreador)
         txtTecnico = view.findViewById(R.id.txtTecnico)
 
         val ticketId = arguments?.getString("ticketId")
@@ -58,7 +56,7 @@ class DetalleTicketFragment : Fragment() {
         val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val token = prefs.getString("access_token", null) ?: ""
         val authHeader = "Bearer $token"
-        val call = ApiClient.retrofit.getTicketById(id, authHeader) // <-- Asegúrate de tener este método en tu interfaz
+        val call = ApiClient.retrofit.getTicketById(id, authHeader)
 
         call.enqueue(object : Callback<TicketResponse> {
             override fun onResponse(call: Call<TicketResponse>, response: Response<TicketResponse>) {
@@ -84,7 +82,6 @@ class DetalleTicketFragment : Fragment() {
         txtEstado.text = "Estado: ${ticket.status}"
         txtFecha.text = "Fecha límite: ${formatearFecha(ticket.end_time)}"
         txtUbicacion.text = "Ubicación: ${ticket.location}"
-        txtCreador.text = "Id del creador: ${ticket.user}"
         txtTecnico.text = "Id del técnico: ${ticket.user}"
 
         obtenerNombreUbicacion(ticket.location.toInt())
@@ -113,12 +110,14 @@ class DetalleTicketFragment : Fragment() {
         })
     }
 
-    private fun formatearFecha(fecha: Date): String {
+    private fun formatearFecha(fecha: Date?): String {
         return try {
+            if (fecha == null) return "Sin fecha"
             val formatter = SimpleDateFormat("dd MMM yyyy", Locale("es", "MX"))
             formatter.format(fecha)
         } catch (e: Exception) {
-            fecha.toString()
+            "Sin fecha"
         }
     }
+
 }

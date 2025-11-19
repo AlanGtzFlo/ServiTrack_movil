@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "938755795909",
+    "project_id": "fixflow-9b2b0",
+    "storage_bucket": "fixflow-9b2b0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938755795909:android:cbaa309b0128f6e10af9ac",
+        "android_client_info": {
+          "package_name": "com.example.servitrack_movil"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBG9kmaYWEpnsc3kXbOjtcIYw4fYK--tK8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

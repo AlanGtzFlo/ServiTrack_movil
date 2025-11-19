@@ -53,23 +53,28 @@ class ListaReporteFragment : Fragment() {
         val token = prefs.getString("access_token", null) ?: ""
         val authHeader = "Bearer $token"
 
-        val call = ApiClient.retrofit.getReportes("Bearer $token")
+        val call = ApiClient.retrofit.getReportesByUser("Bearer $token")
 
         call.enqueue(object : Callback<List<ReporteResponse>> {
             override fun onResponse(call: Call<List<ReporteResponse>>, response: Response<List<ReporteResponse>>) {
                 if (response.isSuccessful && response.body() != null) {
+
+                    Log.d("API_REPORTES_DATA", response.body().toString())
                     listaReportes.clear()
-                    listaReportes.addAll(response.body()!!.map {
+                    listaReportes.addAll(response.body()!!.map { reporte ->
                         Reporte(
-                            id = it.id,
-                            titulo = it.descripcion,
-                            descripcion = it.descripcion,
-                            prioridad = if (it.es_poliza) "Alta" else "Normal",
-                            estado = if (it.es_poliza) "Póliza" else "Normal",
-                            fecha = it.fecha_creacion.take(10),
-                            ubicacion = it.ubicacion.toString(),
-                            creador = it.empresa.toString(),   // Asumiendo que "empresa" es el creador o cambiar según corresponda
-                            tecnico = it.tecnico.toString()
+                            id = reporte.id,
+                            ticket_title = reporte.ticket_title ?: "Sin título",
+                            created_at = (reporte.created_at ?: "Sin fecha").take(10),
+                            cantidadMensajes = reporte.messages.size,
+                            mensajes = reporte.messages.map { msg ->
+                                MensajeParcelable(
+                                    id = msg.id,
+                                    message = msg.message,
+                                    image = msg.image,
+                                    created_at = msg.created_at
+                                )
+                            }
                         )
                     })
                     adapter.notifyDataSetChanged()

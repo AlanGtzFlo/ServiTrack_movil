@@ -32,16 +32,11 @@ interface ApiService {
     //================================================================================
 
     @Multipart
-    @PATCH("api/users/{id}/cambiar_foto/")
-    fun cambiarFoto(
+    @POST("api/users/update_photo/")
+    fun updateUserPhoto(
         @Header("Authorization") token: String,
-        @Path("id") id: Int,
         @Part photo: MultipartBody.Part
-    ): Call<Void>
-
-    @Multipart
-    @POST("api/users/")
-    fun subirImagen(@Part foto: MultipartBody.Part): Call<User>
+    ): Call<UpdatePhotoResponse>
 
     @GET("api/users/{id}/")
     fun obtenerUsuarioPorId(
@@ -49,15 +44,13 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<User>
 
-    @PATCH("api/users/{id}/cambiar_password/")
-    fun cambiarPassword(
-        @Path("id") id: Int,
+    @POST("api/users/change_password/")
+    fun changePassword(
         @Header("Authorization") token: String,
-        @Body nuevaPassword: NuevaPasswordRequest
+        @Body request: ChangePasswordRequest
     ): Call<Void>
 
-    // MARK: - Tickets
-    //================================================================================
+
 
     @GET("api/tickets/")
     fun getTickets(@Header("Authorization") token: String): Call<List<TicketResponse>>
@@ -68,18 +61,16 @@ interface ApiService {
         @Header("Authorization") token: String
     ): Call<TicketResponse>
 
-    @GET("api/tickets/tickets_usuario/")
+    @GET("api/tickets/ticketsbyuserl/")
     fun getTicketsByUser(
         @Header("Authorization") token: String
     ): Call<List<TicketResponse>>
 
-    @GET("/api/tickets/contar_estados_por_usuario")
+    @GET("/api/tickets/count_by_status")
     fun getTicketCountByTechnician(
         @Header("Authorization") token: String
     ): Call<ConteoTicketsResponse>
 
-    // MARK: - Reportes
-    //================================================================================
 
     @Multipart
     @POST("api/reports/")
@@ -99,6 +90,10 @@ interface ApiService {
     @GET("api/reports/")
     fun getReportes(@Header("Authorization") token: String): Call<List<ReporteResponse>>
 
+    @GET("api/reports/reportes-by-user/")
+    fun getReportesByUser(@Header("Authorization") token: String): Call<List<ReporteResponse>>
+
+
     @GET("api/reports/{id}")
     fun getReporteById(@Path("id") id: Int): Call<ReporteResponse>
 
@@ -115,7 +110,7 @@ interface ApiService {
     //================================================================================
 
     @Multipart
-    @POST("api/mensajes_reporte/")
+    @POST("api/messages/")
     fun createMensaje(
         @Header("Authorization") token: String,
         @Part("reporte") reporte: RequestBody,

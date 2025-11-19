@@ -56,7 +56,7 @@ class HomeFragment : Fragment() {
                     ) {
                         if (response.isSuccessful) {
                             val conteo = response.body()
-                            val pendientes = conteo?.pendiente ?: 0
+                            val pendientes = conteo?.abierto ?: 0
                             binding.txtTicketsCard.text = "Tienes $pendientes tickets por resolver"
                         } else {
                             binding.txtTicketsCard.text = "No se pudo cargar el conteo"

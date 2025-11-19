@@ -92,10 +92,10 @@ class DetalleMensaje : Fragment() {
     private fun mostrarDatos(mensaje: MensajeResponse) {
         txtMensajeId.text = "ID:\n${mensaje.id}"
         txtNombreReporte.text = "Reporte:\n${args.nombreReporte ?: "No disponible"}"
-        txtMensaje.text = "Mensaje:\n${mensaje.mensaje}"
-        txtFecha.text = "Fecha:\n${mensaje.fecha}"
+        txtMensaje.text = "Mensaje:\n${mensaje.message}"
+        txtFecha.text = "Fecha:\n${mensaje.created_at}"
 
-        val urlImagen = mensaje.imagen
+        /*val urlImagen = mensaje.imagen
         Log.d("DetalleMensaje", "URL imagen: $urlImagen")
 
         if (!urlImagen.isNullOrEmpty()) {
@@ -106,7 +106,7 @@ class DetalleMensaje : Fragment() {
                 .into(imgMensaje)
         } else {
             imgMensaje.setImageResource(R.drawable.ic_menu_camera)
-        }
+        }*/
     }
 
 

@@ -13,9 +13,12 @@ class ReporteAdapter(
     inner class ReporteViewHolder(val binding: ItemReporteBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(reporte: Reporte) {
-            binding.txtTituloReporte.text = reporte.titulo
-            binding.txtEstado.text = reporte.estado
-            binding.txtFecha.text = reporte.fecha
+            binding.txtTituloReporte.text = reporte.ticket_title
+            val fecha = reporte.created_at.substring(0, 10)
+            binding.txtFecha.text = fecha
+
+            binding.txtEstado.text =
+                "Mensajes: ${reporte.cantidadMensajes}"
 
             binding.root.setOnClickListener {
                 onItemClick(reporte)

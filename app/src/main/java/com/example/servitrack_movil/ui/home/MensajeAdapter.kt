@@ -36,7 +36,7 @@ class MensajeAdapter(
     override fun onBindViewHolder(holder: MensajeViewHolder, position: Int) {
         val mensaje = mensajes[position]
         holder.txtIdReporte.text = "Mensaje ID: ${mensaje.id}"
-        holder.txtFecha.text = mensaje.fecha ?: ""
+        holder.txtFecha.text = mensaje.created_at ?: ""
     }
 
     override fun getItemCount(): Int = mensajes.size

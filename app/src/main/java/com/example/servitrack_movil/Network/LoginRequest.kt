@@ -41,6 +41,18 @@ data class UserInfo(
     val email: String
 )
 
-data class NuevaPasswordRequest(
-    val password: String
+data class UpdatePhotoResponse(
+    val message: String,
+    val photo_url: String
+)
+
+data class ChangePasswordRequest(
+    val current_password: String,
+    val new_password: String,
+    val confirm_password: String
+)
+
+data class GenericResponse(
+    val message: String,
+    val status: Boolean
 )

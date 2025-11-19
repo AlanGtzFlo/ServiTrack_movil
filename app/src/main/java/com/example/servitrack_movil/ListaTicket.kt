@@ -66,21 +66,22 @@ class ListaTicketFragment : Fragment() {
 
         // Configurar listeners de botones para filtrar
         btnOpen.setOnClickListener {
-            filtrarTicketsPorEstado("pendiente") // Cambia el texto si el estado en API es distinto
+            filtrarTicketsPorEstado("abierto") // Cambia el texto si el estado en API es distinto
         }
 
         btnInProgress.setOnClickListener {
-            filtrarTicketsPorEstado("en_proceso") // Cambia según el estado real
+            filtrarTicketsPorEstado("en_curso") // Cambia según el estado real
         }
 
         btnResolved.setOnClickListener {
-            filtrarTicketsPorEstado("completado") // Cambia según el estado real
+            filtrarTicketsPorEstado("cerrado") // Cambia según el estado real
         }
 
         return view
     }
 
     private fun obtenerTicketsDesdeAPI() {
+        Log.d("DEBUG_FLOW", "Entró a obtenerTicketsDesdeAPI()")
         val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val token = prefs.getString("access_token", null) ?: ""
         val authHeader = "Bearer $token"
@@ -91,21 +92,35 @@ class ListaTicketFragment : Fragment() {
                 call: Call<List<TicketResponse>>,
                 response: Response<List<TicketResponse>>
             ) {
+                Log.d("DEBUG_FLOW", "Entró a onResponse de obtenerTicketsDesdeAPI()")
                 if (response.isSuccessful && response.body() != null) {
+
+                    Log.d("DEBUG_FLOW", "La respuesta SÍ es exitosa")
+
                     val responseTickets = response.body()!!
+
                     listaTicketsOriginal.clear()
-                    listaTicketsOriginal.addAll(responseTickets.map {
-                        Ticket(
-                            id = it.id.toString(),
-                            titulo = it.title,
-                            estado = it.status,
-                            fecha = formatearFecha(it.end_time)
+
+                    for (ticketResponse in responseTickets) {
+
+                        // Log para ver los estados reales
+                        Log.d("STATUS_DEBUG", "Estado recibido: ${ticketResponse.status}")
+
+                        val ticket = Ticket(
+                            id = ticketResponse.id.toString(),
+                            titulo = ticketResponse.title,
+                            estado = ticketResponse.status,
+                            fecha = formatearFecha(ticketResponse.end_time)
                         )
-                    })
-                    // Inicialmente mostrar todos los tickets
+
+                        listaTicketsOriginal.add(ticket)
+                    }
+
+                    // Mostrar todos los tickets al inicio
                     listaTickets.clear()
                     listaTickets.addAll(listaTicketsOriginal)
                     adapter.notifyDataSetChanged()
+
                 } else {
                     Log.e("API_ERROR", "Respuesta no exitosa: ${response.code()}")
                 }
@@ -135,6 +150,9 @@ class ListaTicketFragment : Fragment() {
             return
         }
 
+
+        Log.d("TOKEN_DEBUG", "Token enviado: Bearer $token")
+
         ApiClient.retrofit.getTicketCountByTechnician("Bearer $token")
             .enqueue(object : Callback<ConteoTicketsResponse> {
                 override fun onResponse(
@@ -144,6 +162,8 @@ class ListaTicketFragment : Fragment() {
                     if (response.isSuccessful && response.body() != null) {
                         val conteo = response.body()!!
                         Log.d("GRAFICA", "Conteo recibido: $conteo")
+
+
                         mostrarGraficaDesdeConteo(conteo)
                     } else {
                         Log.e("API_CONTEO_ERROR", "Respuesta no exitosa: ${response.code()}")
@@ -157,11 +177,11 @@ class ListaTicketFragment : Fragment() {
     }
 
     private fun mostrarGraficaDesdeConteo(conteo: ConteoTicketsResponse) {
-        Log.d("GRAFICA", "Pendiente: ${conteo.pendiente}, En proceso: ${conteo.en_proceso}, Completado: ${conteo.completado}")
+        Log.d("GRAFICA", "Pendiente: ${conteo.abierto}, En proceso: ${conteo.en_curso}, Completado: ${conteo.cerrado}")
 
-        val pendiente = conteo.pendiente
-        val enProceso = conteo.en_proceso
-        val completado = conteo.completado
+        val pendiente = conteo.abierto
+        val enProceso = conteo.en_curso
+        val completado = conteo.cerrado
 
         val entries = listOf(
             BarEntry(0f, pendiente.toFloat()),
@@ -199,12 +219,14 @@ class ListaTicketFragment : Fragment() {
         barChart.invalidate()
     }
 
-    private fun formatearFecha(fecha: Date): String {
+    private fun formatearFecha(fecha: Date?): String {
         return try {
+            if (fecha == null) return "Sin fecha"
             val formatter = SimpleDateFormat("dd MMM yyyy", Locale("es", "MX"))
             formatter.format(fecha)
         } catch (e: Exception) {
-            fecha.toString()
+            "Sin fecha"
         }
     }
+
 }

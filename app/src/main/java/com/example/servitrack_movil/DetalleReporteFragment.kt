@@ -45,20 +45,15 @@ class DetalleReporteFragment : Fragment() {
 
         binding.btnListadoMensajes.setOnClickListener {
             val action = DetalleReporteFragmentDirections
-                .actionDetalleReporteFragmentToListadoMensajesFragment(reporteId = reporte.id, reporteNombre = reporte.titulo)
+                .actionDetalleReporteFragmentToListadoMensajesFragment(reporteId = reporte.id, reporteNombre = reporte.ticket_title)
             findNavController().navigate(action)
         }
 
         binding.txtTicketId.text = "ID:\n${reporte.id}"
-        binding.txtTitulo.text = "Título:\n${reporte.titulo}"
-        binding.txtDescripcion.text = "Descripción:\n${reporte.descripcion}"
-        binding.txtPrioridad.text = "Prioridad:\n${reporte.prioridad}"
-        binding.txtEstado.text = "Estado:\n${reporte.estado}"
-        binding.txtFecha.text = "Fecha:\n${reporte.fecha}"
-        binding.txtCreador.text = "Id del Creador:\n${reporte.creador}"
-        binding.txtTecnico.text = "Id del Técnico:\n${reporte.tecnico}"
+        binding.txtTitulo.text = "Título:\n${reporte.ticket_title}"
+        binding.txtFecha.text = "Fecha:\n${reporte.created_at}"
 
-        obtenerNombreUbicacion(reporte.ubicacion.toInt())
+        /*obtenerNombreUbicacion(reporte.ubicacion.toInt())*/
 
         // Botón para generar PDF
         binding.btnGenerarPDF.setOnClickListener {

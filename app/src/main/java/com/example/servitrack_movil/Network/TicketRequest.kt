@@ -9,8 +9,8 @@ data class TicketResponse(
     val category: String,
     val priority: String,
     val equipment: String,
-    val start_time: Date,   // puede ser null
-    val end_time: Date,     // puede ser null
+    val start_time: Date,
+    val end_time: Date,
     val duration: String,
     val report: String,
     val status: String,
@@ -35,9 +35,9 @@ data class TicketRequest(
 
 
 data class ConteoTicketsResponse(
-    val pendiente: Int,
-    val completado: Int,
-    val en_proceso: Int,
+    val abierto: Int,
+    val en_espera: Int,
+    val en_curso: Int,
     val cerrado: Int,
     val total: Int
 )
