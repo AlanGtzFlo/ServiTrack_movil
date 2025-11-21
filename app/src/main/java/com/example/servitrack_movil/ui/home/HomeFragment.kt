@@ -14,6 +14,10 @@ import com.example.servitrack_movil.Network.ConteoTicketsResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.servitrack_movil.Network.TicketResponse
+import com.example.servitrack_movil.Network.UbicacionResponse
+import android.content.Context
 
 class HomeFragment : Fragment() {
 
@@ -28,6 +32,89 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    private fun cargarProximoTicket(token: String) {
+
+        ApiClient.retrofit.getTicketsByUser("Bearer $token")
+            .enqueue(object : Callback<List<TicketResponse>> {
+                override fun onResponse(
+                    call: Call<List<TicketResponse>>,
+                    response: Response<List<TicketResponse>>
+                ) {
+                    if (!isAdded || _binding == null) return
+
+                    if (response.isSuccessful) {
+                        val listaTickets = response.body() ?: emptyList()
+                        if (listaTickets.isEmpty()) return
+
+                        val ticket = listaTickets.firstOrNull {
+                            it.status.equals("Abierto", ignoreCase = true)
+                        } ?: listaTickets.first()
+
+                        val idUbicacion = ticket.location.toInt()
+
+                        obtenerNombreUbicacion(idUbicacion) { nombreUbicacion ->
+
+                            if (!isAdded || _binding == null) return@obtenerNombreUbicacion
+
+                            val lista = listOf(
+                                ProximoTicket(
+                                    ubicacion = nombreUbicacion,
+                                    problema = ticket.description,
+                                    fecha = formatearFecha(ticket.start_time)
+                                )
+                            )
+
+                            val adapter = ProximoTicketAdapter(lista)
+                            binding.recyclerConsejos.adapter = adapter
+                            binding.recyclerConsejos.layoutManager =
+                                LinearLayoutManager(requireContext())
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<List<TicketResponse>>, t: Throwable) {
+                    if (!isAdded || _binding == null) return
+                }
+            })
+    }
+
+    private fun formatearFecha(fecha: Date?): String {
+        return try {
+            if (fecha == null) return "Sin fecha"
+            val formatter = SimpleDateFormat("dd MMM yyyy", Locale("es", "MX"))
+            formatter.format(fecha)
+        } catch (e: Exception) {
+            "Sin fecha"
+        }
+    }
+
+    private fun obtenerNombreUbicacion(id: Int, callback: (String) -> Unit) {
+        val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        val token = prefs.getString("access_token", null) ?: ""
+        val authHeader = "Bearer $token"
+
+        ApiClient.retrofit.getUbicaciones(authHeader)
+            .enqueue(object : Callback<List<UbicacionResponse>> {
+                override fun onResponse(
+                    call: Call<List<UbicacionResponse>>,
+                    response: Response<List<UbicacionResponse>>
+                ) {
+                    if (!isAdded) return
+
+                    val ubicacion = if (response.isSuccessful) {
+                        response.body()?.find { it.id == id }?.name ?: "Desconocida"
+                    } else "Desconocida"
+
+                    callback(ubicacion)
+                }
+
+                override fun onFailure(call: Call<List<UbicacionResponse>>, t: Throwable) {
+                    if (!isAdded) return
+                    callback("Error")
+                }
+            })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -35,18 +122,18 @@ class HomeFragment : Fragment() {
         val dateFormat = SimpleDateFormat("EEEE d 'de' MMMM", locale)
         val todayFormatted = dateFormat.format(Date()).replaceFirstChar { it.uppercase(locale) }
 
-        // SharedPreferences
-        val prefs = requireContext().getSharedPreferences("user_prefs", android.content.Context.MODE_PRIVATE)
+        val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
         val nombre = prefs.getString("nombre", "Usuario")
-        val id = prefs.getInt("id", 0)
+        val apellido = prefs.getString("apellido", "")
         val token = prefs.getString("access_token", null)
 
-        // Saludos y fecha
+        if (!token.isNullOrEmpty()) {
+            cargarProximoTicket(token)
+        }
+
         binding.txtSaludo.text = "¡Bienvenido"
-        binding.txtMatricula.text = "$nombre \n\n$todayFormatted"
+        binding.txtMatricula.text = "$nombre $apellido \n\n$todayFormatted"
 
-
-        // Conteo de tickets
         if (!token.isNullOrEmpty()) {
             ApiClient.retrofit.getTicketCountByTechnician("Bearer $token")
                 .enqueue(object : Callback<ConteoTicketsResponse> {
@@ -54,16 +141,15 @@ class HomeFragment : Fragment() {
                         call: Call<ConteoTicketsResponse>,
                         response: Response<ConteoTicketsResponse>
                     ) {
-                        if (response.isSuccessful) {
-                            val conteo = response.body()
-                            val pendientes = conteo?.abierto ?: 0
-                            binding.txtTicketsCard.text = "Tienes $pendientes tickets por resolver"
-                        } else {
-                            binding.txtTicketsCard.text = "No se pudo cargar el conteo"
-                        }
+                        if (!isAdded || _binding == null) return
+
+                        val conteo = response.body()
+                        binding.txtTicketsCard.text =
+                            "Tienes ${conteo?.abierto ?: 0} tickets por resolver"
                     }
 
                     override fun onFailure(call: Call<ConteoTicketsResponse>, t: Throwable) {
+                        if (!isAdded || _binding == null) return
                         binding.txtTicketsCard.text = "Error de conexión"
                     }
                 })

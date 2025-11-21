@@ -89,6 +89,7 @@ class MainActivity : AppCompatActivity() {
                         with(sharedPrefs.edit()) {
                             putInt("id", loginData.user.id)
                             putString("nombre", loginData.user.first_name)
+                            putString("apellido", loginData.user.last_name)
                             putString("correo", loginData.user.email)
                             putString("rol", loginData.user.user_type)
                             putString("access_token", loginData.access)
