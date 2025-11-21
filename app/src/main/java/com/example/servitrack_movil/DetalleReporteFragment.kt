@@ -44,8 +44,15 @@ class DetalleReporteFragment : Fragment() {
         val reporte = args.reporte
 
         binding.btnListadoMensajes.setOnClickListener {
+
+            val mensajesParcelable = reporte.mensajes.toTypedArray()
+
             val action = DetalleReporteFragmentDirections
-                .actionDetalleReporteFragmentToListadoMensajesFragment(reporteId = reporte.id, reporteNombre = reporte.ticket_title)
+                .actionDetalleReporteFragmentToListadoMensajesFragment(
+                    reporteId = reporte.id,
+                    reporteNombre = reporte.ticket_title,
+                    mensajes = mensajesParcelable
+                )
             findNavController().navigate(action)
         }
 

@@ -1,8 +1,6 @@
 package com.example.servitrack_movil
 
-import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,19 +9,18 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.servitrack_movil.Network.ApiClient
 import com.example.servitrack_movil.Network.MensajeResponse
 import com.example.servitrack_movil.ui.home.MensajeAdapter
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import androidx.appcompat.widget.AppCompatButton
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ListaMensajes : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: MensajeAdapter
-    private var mensajesList = mutableListOf<MensajeResponse>()
+    private val mensajesList = mutableListOf<MensajeResponse>()
 
     private val args: ListaMensajesArgs by navArgs()
 
@@ -36,56 +33,76 @@ class ListaMensajes : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerTickets)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        val reporteNombre = args.reporteNombre ?: ""  // <- Aquí se obtiene de args
+        val reporteNombre = args.reporteNombre ?: ""
+        val reporteId = args.reporteId ?: 0
 
+        // Adaptador
         adapter = MensajeAdapter(mensajesList) { mensaje ->
             val action = ListaMensajesDirections
                 .actionListaMensajesFragmentToDetalleMensajeFragment(
-                    mensajeId = mensaje.id.toString(),
+                    mensaje = MensajeParcelable(
+                        id = mensaje.id,
+                        message = mensaje.message,
+                        image = mensaje.image,
+                        created_at = mensaje.created_at
+                    ),
                     nombreReporte = reporteNombre
                 )
             findNavController().navigate(action)
         }
+
         recyclerView.adapter = adapter
 
-        val reporteId = args.reporteId ?: 0  // Maneja caso null
-        val btnCrear = view.findViewById<AppCompatButton>(R.id.btnCrear)
-
-        btnCrear.setOnClickListener {
-            findNavController().navigate(ListaMensajesDirections.actionListaMensajesFragmentToGenerarMensajeFragment(reporteId, reporteNombre))
+        // Botón para crear mensaje
+        view.findViewById<AppCompatButton>(R.id.btnCrear).setOnClickListener {
+            findNavController().navigate(
+                ListaMensajesDirections.actionListaMensajesFragmentToGenerarMensajeFragment(
+                    reporteId,
+                    reporteNombre
+                )
+            )
         }
 
+        // Recuperar mensajes enviados desde el fragment anterior
+        val mensajesInicialesParcelable = args.mensajes?.toList() ?: emptyList()
 
-        val prefs = requireContext().getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
-        val token = prefs.getString("access_token", null) ?: ""
-        val bearerToken = "Bearer $token"
+        mensajesList.clear()
 
-        fetchMensajes(reporteId, bearerToken)
+        val convertidos = mensajesInicialesParcelable.map { convertirParcelableAResponse(it) }
+        mensajesList.addAll(convertidos)
+
+        adapter.notifyDataSetChanged()
 
         return view
     }
 
+    private fun convertirParcelableAResponse(orig: MensajeParcelable): MensajeResponse {
 
-    private fun fetchMensajes(reporteId: Int, token: String) {
-        ApiClient.retrofit.getMensajesPorReporteId(reporteId, token)
-            .enqueue(object : Callback<List<MensajeResponse>> {
-                override fun onResponse(
-                    call: Call<List<MensajeResponse>>,
-                    response: Response<List<MensajeResponse>>
-                ) {
-                    if (response.isSuccessful) {
-                        mensajesList.clear()
-                        mensajesList.addAll(response.body() ?: emptyList())
-                        adapter.notifyDataSetChanged()
-                        Log.d("ListaMensajes", "Mensajes recibidos: ${response.body()}")
-                    } else {
-                        Log.e("ListaMensajes", "Error: ${response.code()}")
-                    }
-                }
+        val formatoServidor = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSXXX", Locale.US)
 
-                override fun onFailure(call: Call<List<MensajeResponse>>, t: Throwable) {
-                    Log.e("ListaMensajes", "Fallo: ${t.message}")
-                }
-            })
+        val fechaDate: Date? = try {
+            formatoServidor.parse(orig.created_at)
+        } catch (e: Exception) {
+            null
+        }
+
+        val fechaFormateada = formatearFecha(fechaDate)
+
+        return MensajeResponse(
+            id = orig.id,
+            message = orig.message,
+            image = orig.image,
+            created_at = fechaFormateada   // ← ya va formateado
+        )
+    }
+
+    private fun formatearFecha(fecha: Date?): String {
+        return try {
+            if (fecha == null) return "Sin fecha"
+            val formatter = SimpleDateFormat("dd MMM yyyy", Locale("es", "MX"))
+            formatter.format(fecha)
+        } catch (e: Exception) {
+            "Sin fecha"
+        }
     }
 }

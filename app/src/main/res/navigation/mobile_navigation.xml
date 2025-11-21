@@ -80,6 +80,11 @@
             app:argType="string"
             app:nullable="true" />
 
+        <argument
+            android:name="mensajes"
+            app:argType="com.example.servitrack_movil.MensajeParcelable[]"
+            app:nullable="true" />
+
         <action
             android:id="@+id/action_listaMensajesFragment_to_detalleMensajeFragment"
             app:destination="@id/detalleMensaje" />
@@ -114,8 +119,8 @@
         tools:layout="@layout/fragment_detalle_mensaje">
 
         <argument
-            android:name="mensajeId"
-            app:argType="string"
+            android:name="mensaje"
+            app:argType="com.example.servitrack_movil.MensajeParcelable"
             app:nullable="false" />
 
         <argument
