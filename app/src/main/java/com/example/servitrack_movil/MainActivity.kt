@@ -158,13 +158,40 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendTokenToServer(token: String) {
-        // AQUÍ DEBES IMPLEMENTAR LA LLAMADA DE RED CON RETROFIT PARA ENVIAR EL TOKEN
-        Log.d("FCM", "Enviando token ($token) al servidor... (Lógica pendiente)")
+    private fun sendTokenToServer(fcmToken: String) {
+        val prefs = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val accessToken = prefs.getString("access_token", null)
 
-        // Una vez que la lógica de envío termine (incluso si falla), navega al menú.
-        navigateToMenu()
+        if (accessToken.isNullOrEmpty()) {
+            Log.e("FCM", "No hay access token guardado. No se envió el FCM token.")
+            navigateToMenu()
+            return
+        }
+
+        val authHeader = "Bearer $accessToken"
+
+        val body = mapOf(
+            "device_token" to fcmToken
+        )
+
+        ApiClient.retrofit.saveFcmToken(authHeader, body)
+            .enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        Log.d("FCM", "FCM token enviado correctamente al servidor.")
+                    } else {
+                        Log.e("FCM", "Error al enviar FCM token. Código: ${response.code()}")
+                    }
+                    navigateToMenu()
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    Log.e("FCM", "Fallo al enviar FCM token: ${t.message}")
+                    navigateToMenu()
+                }
+            })
     }
+
 
     private fun navigateToMenu() {
         val intent = Intent(this, MenuActivity::class.java)

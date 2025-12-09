@@ -6,130 +6,35 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutFormulario"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Imagen del usuario -->
+        <!-- Imagen -->
         <ImageView
             android:id="@+id/imgUsuario"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_marginTop="32dp"
-            android:contentDescription="Foto del usuario"
-            android:scaleType="centerCrop"
             android:src="@drawable/icono_creporte"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
             android:id="@+id/txtTituloVista"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="100dp"
             android:text="Crear reporte"
             android:textColor="#006D77"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgUsuario" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardFormIDs"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:layout_marginHorizontal="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/txtTituloVista"
+            app:layout_constraintTop_toBottomOf="@id/imgUsuario"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#006D77"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <!-- Ticket pendiente (Spinner) -->
-                <TextView
-                    android:id="@+id/tvTicket"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Ticket pendiente"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginTop="16dp" />
-
-                <Spinner
-                    android:id="@+id/spTicket"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_edittext"
-                    android:layout_marginTop="4dp" />
-
-                <!-- Técnico (solo lectura, TextView) -->
-                <TextView
-                    android:id="@+id/tvLabelTecnico"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Matrícula"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginTop="16dp" />
-
-                <EditText
-                    android:id="@+id/etTecnico"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_edittext"
-                    android:textColor="#000000"
-                    android:padding="12dp"
-                    android:hint="123456789"
-                    android:layout_marginTop="4dp" />
-
-                <!-- Ubicación (Spinner) -->
-                <TextView
-                    android:id="@+id/tvUbicacion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Ubicación"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginTop="16dp" />
-
-                <Spinner
-                    android:id="@+id/spUbicacion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_edittext"
-                    android:layout_marginTop="4dp" />
-
-                <!-- Empresa (Spinner) -->
-                <TextView
-                    android:id="@+id/tvEmpresa"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Empresa"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginTop="16dp" />
-
-                <Spinner
-                    android:id="@+id/spEmpresa"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_edittext"
-                    android:layout_marginTop="4dp" />
-
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardFormInfo"
@@ -138,8 +43,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginHorizontal="16dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/cardFormIDs"
+            app:layout_constraintTop_toBottomOf="@+id/txtTituloVista"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -161,87 +65,46 @@
                     android:textAlignment="center"
                     android:layout_marginTop="8dp"/>
 
-                <!-- Descripción -->
+                <!-- Descripción → ticket_title -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutDescripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Descripción"
-                    app:hintTextColor="#000000"
+                    android:hint="Descripción (título del ticket)"
                     android:layout_marginTop="8dp">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etDescripcion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textMultiLine"
-                        android:background="@drawable/rounded_edittext"/>
+                        android:background="@drawable/rounded_edittext"
+                        android:inputType="textMultiLine" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Tiene Póliza -->
                 <TextView
-                    android:id="@+id/tvTienePoliza"
+                    android:id="@+id/tvTicket"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="¿Tiene póliza?"
+                    android:text="Ticket pendiente"
                     android:textColor="#FFFFFF"
-                    android:layout_marginTop="8dp" />
-
-                <Switch
-                    android:id="@+id/switchPoliza"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp" />
-
-                <!-- Tipo de Póliza -->
-                <TextView
-                    android:id="@+id/tvTipoPoliza"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Tipo de Póliza"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginTop="8dp" />
+                    android:layout_marginTop="16dp" />
 
                 <Spinner
-                    android:id="@+id/spTipoPoliza"
+                    android:id="@+id/spTicket"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_edittext"
-                    android:visibility="gone" />
+                    android:layout_marginTop="4dp" />
 
-                <!-- Categoría -->
-                <TextView
-                    android:id="@+id/tvCategoria"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Categoría"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginTop="8dp" />
+                <!-- TODO LO DEMÁS COMENTADO -->
 
-                <Spinner
-                    android:id="@+id/spCategoria"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/rounded_edittext" />
-
-                <!-- Información Reporte -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layoutInfoReporte"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Información del Reporte"
-                    app:hintTextColor="#000000"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="24dp">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etInfoReporte"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textMultiLine"
-                        android:background="@drawable/rounded_edittext"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
+                <!--
+                <TextView ... />
+                <Switch ... />
+                <Spinner ... />
+                <TextInputLayout ... />
+                <EditText ... />
+                -->
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnGuardar"

@@ -38,7 +38,7 @@ class DetalleMensaje : Fragment() {
         txtNombreReporte = view.findViewById(R.id.txtNombreReporte)
         txtMensaje = view.findViewById(R.id.txtMensaje)
         txtFecha = view.findViewById(R.id.txtFecha)
-        imgMensaje = view.findViewById(R.id.imgMensaje)
+        imgMensaje = view.findViewById(R.id.imgFoto)
 
         // Recuperar mensaje del SafeArgs
         val mensaje = args.mensaje
@@ -67,7 +67,7 @@ class DetalleMensaje : Fragment() {
                 .load(mensaje.image)
                 .into(imgMensaje)
         } else {
-            imgMensaje.setImageResource(R.drawable.ic_menu_camera)
+            imgMensaje.setImageResource(R.drawable.icono_mensaje)
         }
     }
 

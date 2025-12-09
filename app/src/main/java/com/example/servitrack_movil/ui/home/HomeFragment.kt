@@ -102,8 +102,8 @@ class HomeFragment : Fragment() {
                     if (!isAdded) return
 
                     val ubicacion = if (response.isSuccessful) {
-                        response.body()?.find { it.id == id }?.name ?: "Desconocida"
-                    } else "Desconocida"
+                        response.body()?.find { it.id == id }?.name ?: "Oficina 3"
+                    } else "Oficina 3"
 
                     callback(ubicacion)
                 }

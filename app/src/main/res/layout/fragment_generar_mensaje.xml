@@ -12,36 +12,33 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Imagen del usuario -->
+        <!-- Imagen -->
         <ImageView
             android:id="@+id/imgMensaje"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_marginTop="32dp"
-            android:contentDescription="Foto del usuario"
-            android:scaleType="centerCrop"
             android:src="@drawable/icono_nuevomensaje"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Título -->
         <TextView
             android:id="@+id/txtTituloVista"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="100dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="100dp"
             android:text="Crear mensaje"
             android:textColor="#006D77"
             android:textSize="24sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@id/imgMensaje"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgMensaje" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Tarjeta con formulario -->
+        <!-- Card del formulario -->
         <androidx.cardview.widget.CardView
             android:id="@+id/cardFormIDs"
             android:layout_width="0dp"
@@ -57,11 +54,28 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#006D77"
                 android:orientation="vertical"
+                android:background="#006D77"
                 android:padding="16dp">
 
-                <!-- Técnico (solo lectura, TextView) -->
+                <!-- Campo Tickets -->
+                <!--<TextView
+                    android:id="@+id/tvTickets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ticket"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="16dp" />
+
+                <Spinner
+                    android:id="@+id/spinnerTicket"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:layout_marginTop="4dp"
+                    tools:ignore="TouchTargetSizeCheck" />-->
+
+                <!-- Campo Reporte -->
                 <TextView
                     android:id="@+id/tvReporte"
                     android:layout_width="match_parent"
@@ -74,12 +88,11 @@
                     android:id="@+id/spinnerReporte"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-
-                    android:textColor="#FFFFFF"
                     android:padding="12dp"
+                    android:layout_marginTop="4dp"
                     tools:ignore="TouchTargetSizeCheck" />
 
+                <!-- Campo Mensaje -->
                 <TextView
                     android:id="@+id/tvMensaje"
                     android:layout_width="match_parent"
@@ -88,14 +101,13 @@
                     android:textColor="#FFFFFF"
                     android:layout_marginTop="16dp" />
 
-                <!-- Descripción -->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layoutDescripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Mensaje"
-                    app:hintTextColor="#000000"
-                    android:layout_marginTop="8dp">
+                    android:layout_marginTop="8dp"
+                    app:hintTextColor="#000000">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etDescripcion"
@@ -108,32 +120,31 @@
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <!-- Botón -->
+        <!-- Botón seleccionar imagen -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnImagen"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/rounded_button_orange"
             android:text="Seleccionar foto"
             android:textColor="@android:color/white"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/rounded_button_orange"
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@id/cardFormIDs"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cardFormIDs" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- Botón -->
+        <!-- Botón Guardar -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnGuardar"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/rounded_button_orange"
             android:text="Guardar"
             android:textColor="@android:color/white"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/rounded_button_orange"
+            android:layout_marginTop="32dp"
+            app:layout_constraintTop_toBottomOf="@id/btnImagen"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnImagen" />
-
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -72,19 +72,21 @@ interface ApiService {
     ): Call<ConteoTicketsResponse>
 
 
+    @POST("api/tickets/save_token/")
+    fun saveFcmToken(
+        @Header("Authorization") token: String,
+        @Body body: Map<String, String>
+    ): Call<Void>
+
+
     @Multipart
     @POST("api/reports/")
     fun createReporte(
         @Header("Authorization") token: String,
         @Part("ticket") ticket: RequestBody,
-        @Part("tecnico") tecnico: RequestBody,
-        @Part("ubicacion") ubicacion: RequestBody,
-        @Part("empresa") empresa: RequestBody,
-        @Part("descripcion") descripcion: RequestBody,
-        @Part("es_poliza") esPoliza: RequestBody,
-        @Part("tipo_poliza") tipoPoliza: RequestBody?,
-        @Part("categoria") categoria: RequestBody,
-        @Part("informacion_reporte") informacionReporte: RequestBody
+        @Part("ticket_title") ticketTitle: RequestBody,
+        @Part("created_at") createdAt: RequestBody,
+        @Part("messages") messages: RequestBody
     ): Call<ReporteResponse>
 
     @GET("api/reports/")
@@ -94,10 +96,19 @@ interface ApiService {
     fun getReportesByUser(@Header("Authorization") token: String): Call<List<ReporteResponse>>
 
 
-    @GET("api/reports/{id}")
-    fun getReporteById(@Path("id") id: Int): Call<ReporteResponse>
+    @Multipart
+    @POST("api/reports/{id}/add-message/")
+    fun addMessageToReport(
+        @Header("Authorization") token: String,
+        @Path("id") reportId: Int,
+        @Part("message") message: RequestBody,
+        @Part image: MultipartBody.Part? = null
+    ): Call<MensajeResponse>
 
-    @GET("api/reports/{id}/exportar_reporte/")
+
+
+
+    @GET("api/reports/{id}/export-pdf/")
     fun exportarPdf(
         @Path("id") id: Int,
         @Header("Authorization") token: String
@@ -112,11 +123,11 @@ interface ApiService {
     @Multipart
     @POST("api/messages/")
     fun createMensaje(
-        @Header("Authorization") token: String,
         @Part("reporte") reporte: RequestBody,
         @Part("mensaje") mensaje: RequestBody,
         @Part imagen: MultipartBody.Part? = null
     ): Call<Void>
+
 
     @GET("api/mensajes_reporte/mensajes_por_reporte_id/")
     fun getMensajesPorReporteId(
